@@ -11,6 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.zerock.b01.domain.Board;
 import org.zerock.b01.dto.BoardDTO;
+import org.zerock.b01.dto.PageRequestDTO;
+import org.zerock.b01.dto.PageResponseDTO;
+import org.zerock.b01.service.BoardService;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +25,9 @@ public class BoardRepositoryTests {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private BoardService boardService;
 
     @Test
     public void insertTest(){
@@ -97,6 +103,19 @@ public class BoardRepositoryTests {
         log.info(result.hasPrevious() +": "+result.hasNext());
 
         result.getContent().forEach(board -> log.info(board));
+    }
+    @Test
+    public void testList(){
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .type("tcw")
+                .keyword("1")
+                .page(1)
+                .size(10)
+                .build();
+
+        PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
+
+        log.info(responseDTO);
     }
 
 }
