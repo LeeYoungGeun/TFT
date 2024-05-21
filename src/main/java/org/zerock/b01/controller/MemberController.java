@@ -14,6 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/member/")
 public class MemberController {
 
+    @GetMapping("/mypage")
+    public void mypage(Model model) {
+
+        log.info("mypage ..........................");
+
+        model.addAttribute("msg", "mypage");
+    }
+
     @GetMapping("/login")
     public void login(Model model) {
 
@@ -22,13 +30,15 @@ public class MemberController {
         model.addAttribute("msg", "login");
     }
 
-    @GetMapping("/mypage")
-    public void mypage(Model model) {
+    @GetMapping("/join")
+    public void join(Model model) {
 
-        log.info("mypage ..........................");
+        log.info("join ..........................");
 
-        model.addAttribute("msg", "mypage");
+        model.addAttribute("msg", "join");
     }
+
+
 
 
     @GetMapping("/modify")
