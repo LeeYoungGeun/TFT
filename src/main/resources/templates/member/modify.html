@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+<head>
+    <title>Modify</title>
+</head>
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card-header">
+                회원정보 수정
+            </div>
+            <div class="card-body">
+                <form id="registerForm" action="/member/join" method="post">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">ID</span>
+                        <input type="text" name="mid" class="form-control" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">NAME</span>
+                        <input type="text" name="mname" class="form-control" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">NICK NAME</span>
+                        <input type="text" name="mid" class="form-control">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">PASSWORD</span>
+                        <input type="text" name="mpw" class="form-control">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">EMAIL</span>
+                        <input type="email" name="memail" class="form-control">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">PHONE NUMBER</span>
+                        <input type="text" name="mpno" class="form-control">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span style="color: red"> - 를 제거하고 입력해주세요</span>
+                    </div>
+                    <div class="my-4">
+                        <div class="float-end">
+                            <button type="submit" class="btn btn-primary submitBtn">수정</button>
+                            <button type="button" class="btn btn-secondary resetBtn">Reset</button>
+                            <button type="button" class="btn btn-secondary listBtn">목록</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!--end card body-->
+        </div><!--end card-->
+    </div><!--end col-->
+</div>
+
+
+<script layout:fragment="script" th:inline="javascript">
+
+
+    document.querySelector(".listBtn").addEventListener("click", function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        self.location = '/member/mypage'
+
+    }, false)
+
+    document.querySelector(".resetBtn").addEventListener("click", function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        self.location = '/member/modify'
+
+    }, false)
+
+</script>
+
+</html>

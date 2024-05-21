@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+<head>
+    <title>Mypage</title>
+</head>
+
+<div layout:fragment="content">
+
+    <br>
+    <h1> xxx님 반갑습니다. </h1>
+    <br>
+
+    <div class="col-lg-6 col-xxl-4 my-5 mx-auto">
+        <div class="d-grid gap-2">
+            <button class="btn btn-outline-secondary modifyBtn" type="button">회원정보 수정</button>
+            <button class="btn btn-primary deleteBtn" type="button">회원탈퇴</button>
+        </div>
+    </div>
+</div>
+
+
+<script layout:fragment="script" th:inline="javascript">
+
+
+    document.querySelector(".modifyBtn").addEventListener("click", function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        self.location = '/member/modify'
+
+    }, false)
+
+    document.querySelector(".deleteBtn").addEventListener("click", function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        self.location = '/member/delete'
+
+    }, false)
+
+</script>
+
+</html>
