@@ -92,24 +92,25 @@ public class BoardRepositoryTests {
     }
 
     @Test
-    public void testSearchAll(){
-        String[] type = {"t","w","c"};
+    public void testSearchAll() {
+        String[] type = {"t", "w", "c"};
 
         String keyword = "1";
 
-        Pageable pageable = PageRequest.of(0,10,Sort.by("bno").descending());
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
 
         Page<Board> result = boardRepository.searchAll(type, keyword, pageable);
 
         log.info(result.getTotalPages());
         log.info(result.getSize());
         log.info(result.getNumber());
-        log.info(result.hasPrevious() +": "+result.hasNext());
+        log.info(result.hasPrevious() + ": " + result.hasNext());
 
         result.getContent().forEach(board -> log.info(board));
     }
+
     @Test
-    public void testList(){
+    public void testList() {
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
                 .type("tcw")
                 .keyword("1")
@@ -121,32 +122,32 @@ public class BoardRepositoryTests {
 
         log.info(responseDTO);
     }
+
     @Test
-    public void testInsertWithImages(){
+    public void testInsertWithImages() {
         Board board = Board.builder()
                 .title("Image test")
                 .content("첨부파일 테스트11")
                 .writer("tester")
                 .build();
-        for (int i = 0; i< 3; i++){
-            board.addImage(UUID.randomUUID().toString(),"야이새끼야!!"+i+".jpg");
+        for (int i = 0; i < 3; i++) {
+            board.addImage(UUID.randomUUID().toString(), "야이새끼야!!" + i + ".jpg");
         }
         boardRepository.save(board);
     }
 
 
-
     @Test
     public void testSearchReplyCount() {
 
-        String[] types = {"t","w","c"};
+        String[] types = {"t", "w", "c"};
 
         String keyword = "1";
 
-        Pageable pageable = PageRequest.of(0,10, Sort.by("bno").descending());
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
 
         Page<BoardListReplyCountDTO> result = boardRepository.
-                                        searchWithReplyCount(types, keyword, pageable);
+                searchWithReplyCount(types, keyword, pageable);
 
         //total pages
         log.info(result.getTotalPages());
@@ -158,17 +159,17 @@ public class BoardRepositoryTests {
         log.info(result.getNumber());
 
         //prev next
-        log.info(result.hasPrevious() +": " + result.hasNext());
+        log.info(result.hasPrevious() + ": " + result.hasNext());
 
         result.getContent().forEach(board -> log.info(board));
-      
+
     }
 
 
     @Transactional
     @Test
     public void testReadWithImage() {
-        Optional<Board> result = boardRepository.findById(111L);
+        Optional<Board> result = boardRepository.findById(112L);
         Board board = result.orElseThrow();
 
 
@@ -177,5 +178,53 @@ public class BoardRepositoryTests {
         for (BoardImage boardImage : board.getImageSet()) {
             log.info(boardImage);
         }
+
     }
+    @Test
+    public void testListWithAll(){
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(1)
+                .size(10)
+                .build();
+
+        PageResponseDTO<BoardListAllDTO> responseDTO =
+                boardService.listWithAll(pageRequestDTO);
+
+        List<BoardListAllDTO> dtoList = responseDTO.getDtoList();
+
+        dtoList.forEach(boardListAllDTO -> {
+            log.info(boardListAllDTO.getBno()+":"+boardListAllDTO.getTitle());
+
+            if (boardListAllDTO.getBoardImages() != null){
+                for (BoardImageDTO boardImageDTO : boardListAllDTO.getBoardImages()) {
+                    log.info(boardImageDTO);
+                }
+            }
+            log.info("=================================git");
+
+        });
+    }
+
+    @Test
+    public void testRegisterWithImages(){
+        log.info(boardRepository.getClass().getName());
+
+        BoardDTO boardDTO = BoardDTO.builder()
+                .title("File...Sample...Title....")
+                .content("Sample Content.....")
+                .writer("user00")
+                .build();
+
+        boardDTO.setFileNames(
+                Arrays.asList(
+                        UUID.randomUUID()+"_aaa.jpg",
+                        UUID.randomUUID()+"_bbb.jpg",
+                        UUID.randomUUID()+"_ccc.jpg"
+                ));
+        Long bno = boardService.register(boardDTO);
+
+        log.info("bno : "+ bno);
+
+    }
+
 }

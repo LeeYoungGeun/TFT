@@ -1,39 +1,48 @@
 package org.zerock.b01.controller;
 
 
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.zerock.b01.dto.BoardDTO;
-import org.zerock.b01.dto.BoardListReplyCountDTO;
-import org.zerock.b01.dto.PageRequestDTO;
-import org.zerock.b01.dto.PageResponseDTO;
+import org.zerock.b01.domain.Board;
+import org.zerock.b01.dto.*;
 import org.zerock.b01.service.BoardService;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.util.List;
 
 
 @Controller
 @Log4j2
-@RequiredArgsConstructor//생성자주입
-@RequestMapping("/board") // /board를 써야만 들어 올 수 있음
+@RequiredArgsConstructor
+@RequestMapping("/board")
 public class BoardController {
 
-    private final BoardService boardService; //싱글톤
+    @Value("C:\\upload")
+    private String uploadPath;
+
+    private final BoardService boardService;
 
     @GetMapping("/list")
     public void setLog(PageRequestDTO pageRequestDTO, Model model) {
 //       PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
 
-        PageResponseDTO<BoardListReplyCountDTO> responseDTO =
-                boardService.listWithReplyCount(pageRequestDTO);
+        PageResponseDTO<BoardListAllDTO> responseDTO =
+                boardService.listWithAll(pageRequestDTO);
 
         log.info(responseDTO);
 
@@ -45,23 +54,22 @@ public class BoardController {
     public void registerGet(){
 
     }
-    @PostMapping("/register") //등록 입력.
-    public String registerPost(@Valid BoardDTO boardDTO, //값이 들어가 있는지 검증.
-                               BindingResult bindingResult, //오류 출력
-                               RedirectAttributes redirectAttributes){
+    @PostMapping("/register")
+    public String registerPost(@Valid BoardDTO boardDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
 
-        log.info("board Post register........");
-        if(bindingResult.hasErrors()){ //에러가 발생시 출력
-            log.info("has errors");
-            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/board/register"; //에러가 발생하면 이쪽으로 리턴.
+        log.info("board POST register.......");
+
+        if(bindingResult.hasErrors()) {
+            log.info("has errors.......");
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors() );
+            return "redirect:/board/register";
         }
 
-        // 등록작업
         log.info(boardDTO);
 
-        Long bno = boardService.register(boardDTO);
-        redirectAttributes.addFlashAttribute("result", bno); //화면에만 보이고
+        Long bno  = boardService.register(boardDTO);
+
+        redirectAttributes.addFlashAttribute("result", bno);
 
         return "redirect:/board/list";
     }
@@ -93,14 +101,51 @@ public class BoardController {
         return "redirect:/board/read";
     }
 
+
     @PostMapping("/remove")
-    public String remove(Long bno, RedirectAttributes redirectAttributes){
-            boardService.remove(bno);
-            redirectAttributes.addFlashAttribute("result", "removed");
-            return "redirect:/board/list";
+    public String remove(BoardDTO boardDTO, RedirectAttributes redirectAttributes){
+        log.info("REMOVE----------------------------------------------");
+        log.info("bno : "+ boardDTO.getBno());
+
+
+        boardService.remove(boardDTO.getBno());
+
+
+        log.info(boardDTO.getFileNames());
+        List<String> fileNames = boardDTO.getFileNames();
+        if(fileNames != null && fileNames.size() > 0){
+            removeFiles(fileNames);
+        }
+
+        redirectAttributes.addFlashAttribute("result","removed");
+
+        return "redirect:/board/list";
     }
 
+    public void removeFiles(List<String> files){
 
+        for (String fileName:files) {
+
+            Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
+            String resourceName = resource.getFilename();
+
+
+            try {
+                String contentType = Files.probeContentType(resource.getFile().toPath());
+                resource.getFile().delete();
+
+
+                if (contentType.startsWith("image")) {
+                    File thumbnailFile = new File(uploadPath + File.separator + "s_" + fileName);
+                    thumbnailFile.delete();
+                }
+
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+
+        }
+    }
 
 
 }

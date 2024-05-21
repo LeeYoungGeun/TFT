@@ -3,6 +3,7 @@ package org.zerock.b01.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +13,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "imageSet")
 public class Board extends BaseEntity{
 
     @Id
@@ -33,8 +34,9 @@ public class Board extends BaseEntity{
         this.content = content;
     }
 
-    @OneToMany(mappedBy = "board", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     @Builder.Default
+    @BatchSize(size = 20)
     private Set<BoardImage> imageSet = new HashSet<>();
 
     public void addImage(String uuid, String filename){
@@ -47,7 +49,7 @@ public class Board extends BaseEntity{
         imageSet.add(boardImage);
     }
 
-    public void ClearImages(){
+    public void clearImages(){
         imageSet.forEach(boardImage -> boardImage.changeBoard(null));
 
         this.imageSet.clear();
