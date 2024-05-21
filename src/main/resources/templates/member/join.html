@@ -1,10 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Member Join Page</title>
 </head>
-<body>
 
-</body>
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    JOIN
+                </div>
+                <div class="card-body">
+                    <form id="registerForm" action="/member/join" method="post">
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">ID</span>
+                            <input type="text" name="mid" class="form-control">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">PASSWORD</span>
+                            <input type="password" name="mpw" class="form-control">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">EMAIL</span>
+                            <input type="email" name="email" class="form-control">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">NICK</span>
+                            <input type="text" name="nickname" class="form-control">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">NAME</span>
+                            <input type="text" name="name" class="form-control">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">PHONENUM</span>
+                            <input type="number" name="phonenumber" class="form-control">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">REGDATE</span>
+                            <input type="date" name="regdate" class="form-control">
+                        </div>
+
+                        <div class="my-4">
+                            <div class="float-end">
+                                <button type="submit" class="btn btn-primary submitBtn">Submit</button>
+                                <button type="reset" class="btn btn-secondary">Reset</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div> <!--end card-body -->
+            </div> <!-- end card -->
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+    const error = [[${error}]]
+
+    if(error && error === 'mid') {
+        alert("동일한 MID를 가진 계정이 존재합니다.")
+    }
+
+</script>
+
 </html>
