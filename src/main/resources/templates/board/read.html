@@ -25,6 +25,12 @@
             <input type="text" class="form-control" th:value="${dto.title}" readonly>
           </div>
 
+          <div class="card" th:if="${dto.fileNames != null && dto.fileNames.size() > 0}">
+            <img class="card-img-top"
+                 th:each="fileName: ${dto.fileNames}"
+                 th:src="|/view/${fileName}|">
+          </div>
+
           <div class="input-group mb-3">
             <span class="input-group-text">Content</span>
             <textarea class="form-control col-sm-5" rows="5" readonly>[[${dto.content}]]</textarea>
