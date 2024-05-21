@@ -30,7 +30,10 @@ public class BoardController {
 
     @GetMapping("/list")
     public void setLog(PageRequestDTO pageRequestDTO, Model model) {
-       PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
+//       PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
+
+        PageResponseDTO<BoardListReplyCountDTO> responseDTO =
+                boardService.listWithReplyCount(pageRequestDTO);
 
         log.info(responseDTO);
 
@@ -89,13 +92,13 @@ public class BoardController {
 
         return "redirect:/board/read";
     }
-@PostMapping("/remove")
-public String remove(Long bno, RedirectAttributes redirectAttributes){
-        boardService.remove(bno);
-        redirectAttributes.addFlashAttribute("result", "removed");
-        return "redirect:/board/list";
-}
 
+    @PostMapping("/remove")
+    public String remove(Long bno, RedirectAttributes redirectAttributes){
+            boardService.remove(bno);
+            redirectAttributes.addFlashAttribute("result", "removed");
+            return "redirect:/board/list";
+    }
 
 
 

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.zerock.b01.domain.Board;
 import org.zerock.b01.dto.BoardDTO;
+import org.zerock.b01.dto.BoardListReplyCountDTO;
 import org.zerock.b01.dto.PageRequestDTO;
 import org.zerock.b01.dto.PageResponseDTO;
 import org.zerock.b01.service.BoardService;
@@ -118,4 +119,32 @@ public class BoardRepositoryTests {
         log.info(responseDTO);
     }
 
+
+    @Test
+    public void testSearchReplyCount() {
+
+        String[] types = {"t","w","c"};
+
+        String keyword = "1";
+
+        Pageable pageable = PageRequest.of(0,10, Sort.by("bno").descending());
+
+        Page<BoardListReplyCountDTO> result = boardRepository.
+                                        searchWithReplyCount(types, keyword, pageable);
+
+        //total pages
+        log.info(result.getTotalPages());
+
+        //pag size
+        log.info(result.getSize());
+
+        //pageNumber
+        log.info(result.getNumber());
+
+        //prev next
+        log.info(result.hasPrevious() +": " + result.hasNext());
+
+        result.getContent().forEach(board -> log.info(board));
+
+    }
 }

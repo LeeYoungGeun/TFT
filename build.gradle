@@ -59,7 +59,7 @@ dependencies {
     implementation 'org.modelmapper:modelmapper:3.2.0'
 
     // Swagger UI(spring boot 3에서 사용)
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
     // ThymeLeaf에서 스프링 시큐리티 사용하기 위한 라이브러리
 //    implementation 'org.springframework.boot:spring-boot-starter-security'
