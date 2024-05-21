@@ -167,15 +167,15 @@ public class BoardRepositoryTests {
 
     @Transactional
     @Test
-    public void testReadWithImage(){
+    public void testReadWithImage() {
         Optional<Board> result = boardRepository.findById(111L);
         Board board = result.orElseThrow();
 
 
         log.info(board);
         log.info("------------------");
-        for (BoardImage boardImage : board.getImageSet()){
+        for (BoardImage boardImage : board.getImageSet()) {
             log.info(boardImage);
         }
-
+    }
 }
