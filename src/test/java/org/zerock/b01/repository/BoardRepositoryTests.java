@@ -1,6 +1,7 @@
 package org.zerock.b01.repository;
 
 
+import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.zerock.b01.domain.Board;
+import org.zerock.b01.domain.BoardImage;
 import org.zerock.b01.dto.BoardDTO;
 import org.zerock.b01.dto.PageRequestDTO;
 import org.zerock.b01.dto.PageResponseDTO;
@@ -17,6 +19,7 @@ import org.zerock.b01.service.BoardService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @SpringBootTest
 @Log4j2
@@ -117,5 +120,30 @@ public class BoardRepositoryTests {
 
         log.info(responseDTO);
     }
+    @Test
+    public void testInsertWithImages(){
+        Board board = Board.builder()
+                .title("Image test")
+                .content("첨부파일 테스트11")
+                .writer("tester")
+                .build();
+        for (int i = 0; i< 3; i++){
+            board.addImage(UUID.randomUUID().toString(),"야이새끼야!!"+i+".jpg");
+        }
+        boardRepository.save(board);
+    }
 
+    @Transactional
+    @Test
+    public void testReadWithImage(){
+        Optional<Board> result = boardRepository.findById(111L);
+        Board board = result.orElseThrow();
+
+
+        log.info(board);
+        log.info("------------------");
+        for (BoardImage boardImage : board.getImageSet()){
+            log.info(boardImage);
+        }
+    }
 }
