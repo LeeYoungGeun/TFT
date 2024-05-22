@@ -57,6 +57,16 @@
 
 <script layout:fragment="script" th:inline="javascript">
 
+    // [[${error}]]; 타임리프 문법
+    const error = [[${error}]];
+
+    console.log(error);
+
+    // error가 값이 있으면 true임
+    // 에러가 있으면서 에러의 이름이 mid인 경우
+    if (error && error == 'mid'){
+        alert("동일한 ID를 가진 계정이 존재합니다.")
+    }
 
     document.querySelector(".listBtn").addEventListener("click", function (e) {
         e.preventDefault()
