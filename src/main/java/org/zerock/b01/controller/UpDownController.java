@@ -84,12 +84,13 @@ public class UpDownController {
        }
        return ResponseEntity.ok().headers(headers).body(resource);
     }
-    @Operation(summary = "DELETE방식으로 파일삭제")
-    @DeleteMapping(value = "/view/{fileName}")
-    public Map<String, Boolean> removeFile(@PathVariable String fileName){
 
-        Resource resource = new FileSystemResource(uploadPath+File.separator+fileName);
 
+    @Operation(summary = "DELETE 방식으로 파일 삭제")
+    @DeleteMapping("/remove/{fileName}")
+    public Map<String,Boolean> removeFile(@PathVariable String fileName){
+
+        Resource resource = new FileSystemResource(uploadPath+File.separator + fileName);
         String resourceName = resource.getFilename();
 
         Map<String, Boolean> resultMap = new HashMap<>();
@@ -97,18 +98,21 @@ public class UpDownController {
 
         try {
             String contentType = Files.probeContentType(resource.getFile().toPath());
-        removed = resource.getFile().delete();
+            removed = resource.getFile().delete();
 
-        if (contentType.startsWith("image")){
-            File thumbFile = new File(uploadPath+File.separator+fileName);
-            thumbFile.delete();
-        }
 
-        }catch (Exception e){
+            if(contentType.startsWith("image")){
+                File thumbnailFile = new File(uploadPath+File.separator +"s_" + fileName);
+                thumbnailFile.delete();
+            }
+
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
-    resultMap.put("result", removed);
-    return resultMap;
+
+        resultMap.put("result", removed);
+
+        return resultMap;
     }
 
 }

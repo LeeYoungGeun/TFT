@@ -4,7 +4,7 @@
       layout:decorate="~{layout/basic.html}">
 
 <head>
-    <title>Board Register</title>
+    <title>더쿠</title>
 </head>
 
 <div layout:fragment="content">
@@ -12,37 +12,37 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    Board Register
+                    더쿠 게시판
                 </div>
                 <div class="card-body">
                     <form action="/board/register" method="post">
                         <div class="input-group mb-3">
-                            <span class="input-group-text">Title</span>
+                            <span class="input-group-text">제목</span>
                             <input type="text" name="title" class="form-control" placeholder="Title">
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">Content</span>
+                            <span class="input-group-text">글내용</span>
                             <textarea class="form-control col-sm-5" rows="5" name="content"></textarea>
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">Writer</span>
+                            <span class="input-group-text">작성자</span>
                             <input type="text" name="writer" class="form-control" placeholder="Writer">
 
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">Images</span>
+                            <span class="input-group-text">이미지</span>
                             <div class="float-end uploadHidden">
-                                <button type="button" class="btn btn-primary uploadFileBtn">ADD Files</button>
+                                <button type="button" class="btn btn-primary uploadFileBtn">이미지 등록</button>
                             </div>
                         </div>
 
                         <div class="my-4">
                             <div class="float-end">
-                                <button type="submit" class="btn btn-primary submitBtn">Submit</button>
-                                <button type="reset" class="btn btn-secondary">Reset</button>
+                                <button type="submit" class="btn btn-primary submitBtn">작성</button>
+                                <button type="reset" class="btn btn-secondary">초기화</button>
                             </div>
                         </div>
 
@@ -54,7 +54,7 @@
         </div><!-- end col-->
     </div><!-- end row-->
 
-    <!—- 첨부 파일 섬네일을 보여줄 부분 -->
+
     <div class="row mt-3">
         <div class="col ">
             <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
@@ -62,7 +62,7 @@
         </div>
     </div>
 
-    <!—- 첨부파일 추가를 위한 모달창 -->
+
     <div class="modal uploadModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -77,7 +77,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary uploadBtn">Upload</button>
-                    <button type="button" class="btn btn-outline-dark closeUploadBtn" >Close</button>
+                    <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal" >Close</button>
                 </div>
             </div>
         </div>
@@ -162,23 +162,18 @@
     }
 
 
-    const removeFileList = []
-
     function removeFile(uuid,fileName, obj){
-
-        if(!confirm("파일을 삭제하시겠습니까?")){
-            return
-        }
 
         console.log(uuid)
         console.log(fileName)
 
         console.log(obj)
 
-        removeFileList.push({uuid,fileName})
-
         const targetDiv = obj.closest(".card")
-        targetDiv.remove()
+
+        removeFileToServer(uuid, fileName).then(data => {
+            targetDiv.remove()
+        })
     }
 
     document.querySelector(".submitBtn").addEventListener("click", function(e){

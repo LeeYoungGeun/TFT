@@ -39,10 +39,10 @@ public class Board extends BaseEntity{
     @BatchSize(size = 20)
     private Set<BoardImage> imageSet = new HashSet<>();
 
-    public void addImage(String uuid, String filename){
+    public void addImage(String uuid, String fileName){
         BoardImage boardImage = BoardImage.builder()
                 .uuid(uuid)
-                .fileName(filename)
+                .fileName(fileName)
                 .board(this)
                 .ord(imageSet.size())
                 .build();
