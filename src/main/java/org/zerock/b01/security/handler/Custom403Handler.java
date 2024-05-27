@@ -24,17 +24,17 @@ public class Custom403Handler implements AccessDeniedHandler {
         log.info("Content-Type: " + contentType);
 
         if(contentType == null) {
-            response.sendRedirect("/member/login?error=ACCESS_DENIED");
+            //알수없는 요청 페이지로 이동시켜야함
+            response.sendRedirect("/member/login?error=ANNOWN");
         }else {
             boolean jsonRequest = contentType.startsWith("application/json");
             log.info("is json : " + jsonRequest);
+            // 일반 request
+            if(!jsonRequest){
+                response.sendRedirect("/member/login?error=ACCESS_DENIED");
+            }
         }
 
-            // 일반 request
-            /*if(!jsonRequest){
-
-            }
-        }*/
 
     }
 }

@@ -82,9 +82,9 @@ public class MemberController {
     }
 
 
-//    @PreAuthorize("principal.username==#memberJoinDTO.mid")
+    @PreAuthorize("principal.username==#memberJoinDTO.mid")
     @GetMapping("/modify")
-    public void modify(Model model, MemberJoinDTO memberJoinDTO , RedirectAttributes redirectAttributes) {
+    public void modify(Model model, MemberJoinDTO memberJoinDTO) {
         log.info("modify..........................");
         log.info("memberJoinDTO.........................." + memberJoinDTO);
 

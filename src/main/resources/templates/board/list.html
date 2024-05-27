@@ -106,10 +106,10 @@
 <script layout:fragment="script" th:inline="javascript">
 
     // 로그인상태에서 로그인 접근 시 /board/list로 리다이렉팅되면서 alert 출력
-    const allready = [[${allready}]];
+    /*const allready = [[${allready}]];
     if (allready) {
         alert("이미 로그인 상태입니다.")
-    }
+    }*/
 
     document.querySelector(".pagination").addEventListener("click", function (e) {
         e.preventDefault();
