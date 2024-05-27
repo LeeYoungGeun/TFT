@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.zerock.b01.domain.Member;
+import org.zerock.b01.domain.MemberRole;
 import org.zerock.b01.dto.BoardDTO;
 import org.zerock.b01.dto.MemberJoinDTO;
 import org.zerock.b01.repository.MemberRespository;
@@ -24,6 +25,8 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public void join(MemberJoinDTO memberJoinDTO) throws MidExistException {
 
+        log.info("Member Service Imp join================================");
+
         String mid = memberJoinDTO.getMid();
 
         boolean exist = memberRespository.existsById(mid);
@@ -35,8 +38,10 @@ public class MemberServiceImpl implements MemberService{
 
         Member member = modelMapper.map(memberJoinDTO, Member.class);
         member.changePassword(passwordEncoder.encode(memberJoinDTO.getMpw()));
+        member.addRole(MemberRole.USER);
 
         log.info(member);
+        log.info(member.getRoleSet());
 
         memberRespository.save(member);
     }
@@ -69,6 +74,13 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public void remove(String mid) {
         log.info("Member service impl remove --------------------------------------");
-        memberRespository.deleteById(mid);
+        log.info(mid);
+
+        Member member = getDetail(mid);
+        member.changeDel(true);
+
+        log.info(member);
+
+        memberRespository.save(member);
     }
 }

@@ -62,12 +62,13 @@ public class BoardController {
 
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/register")
     public void registerGet(){
 
     }
 
+    @PreAuthorize("hasAnyRole({'ROLE_USER','ROLE_ADMIN'})")
     @PostMapping("/register")
     public String registerPost(@Valid BoardDTO boardDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
 

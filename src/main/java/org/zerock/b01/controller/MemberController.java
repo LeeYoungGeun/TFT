@@ -17,8 +17,6 @@ import org.zerock.b01.domain.Member;
 import org.zerock.b01.dto.MemberJoinDTO;
 import org.zerock.b01.service.MemberService;
 
-import java.util.Optional;
-
 @Controller
 @Log4j2
 @RequiredArgsConstructor
@@ -28,7 +26,7 @@ public class MemberController {
     @Autowired
     MemberService memberService;
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage")
     public void mypage(Model model) {
 
@@ -36,11 +34,17 @@ public class MemberController {
 
         model.addAttribute("msg", "mypage");
     }
-//    익명인 경우에만 접근 가능하게 설정 ( 403 포비든 에러페이지가 뜨기때문에 핸들링 해줘야함)
-//    @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
-    public String login(Model model, RedirectAttributes redirectAttributes) {
+    public String login(Model model, RedirectAttributes redirectAttributes, String error) {
         log.info("login ..........................");
+        log.info("error : "  + error);
+
+        if (error != null && error.equals("ACCESS_DENIED")){
+            log.info("ACCESS_DENIED ..........................");
+            return "error/403_hdr.html";
+        } else  if (error != null && error.equals("UN_KNOWN")){
+            return "error/unknown_hdr.html";
+        }
 
         //로그인한 사용자가 로그인페이지로 접근 시 처리 (컨트롤러에서 처리하는방법)
         Authentication authentication   = SecurityContextHolder.getContext().getAuthentication();
@@ -78,11 +82,10 @@ public class MemberController {
 
         redirectAttributes.addAttribute("join", "join_success");
 
-        return "redirect:/member/login";
+        return "redirect:/logout";
     }
 
-
-    @PreAuthorize("principal.username==#memberJoinDTO.mid")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify")
     public void modify(Model model, MemberJoinDTO memberJoinDTO) {
         log.info("modify..........................");
@@ -104,8 +107,7 @@ public class MemberController {
 
     }
 
-
-//    @PreAuthorize("principal.username==#memberJoinDTO.mid")
+    @PreAuthorize("principal.username==#memberJoinDTO.mid")
     @PostMapping("/modify")
     public String modifyPost(Model model, MemberJoinDTO memberJoinDTO) {
         log.info("modifyPost..........................");
@@ -116,13 +118,12 @@ public class MemberController {
         return "redirect:/logout";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/remove")
     public String remove(Model model ,MemberJoinDTO memberJoinDTO) {
         log.info("remove..........................");
         log.info(memberJoinDTO);
-
-        String mid =  memberJoinDTO.getMid();
-        memberService.remove(mid);
+        memberService.remove(memberJoinDTO.getMid());
 
         return "redirect:/logout";
     }

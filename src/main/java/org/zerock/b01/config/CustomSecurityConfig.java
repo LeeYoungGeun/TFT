@@ -29,6 +29,11 @@ public class CustomSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.info("-----------------security configure--------------------");
+
+        http.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
+            httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(accessDeniedHandler());
+        });
+
         //로그인페이지 기본페이지에서 변경
         http.formLogin(form -> {
             form.loginPage("/member/login")
@@ -40,7 +45,7 @@ public class CustomSecurityConfig {
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
 
         http.rememberMe(httpSecurityRememberMeConfigurer -> {
-           httpSecurityRememberMeConfigurer.key("12345678")
+           httpSecurityRememberMeConfigurer.key("123456789")
                    .tokenRepository(persistentTokenRepository())
                    .userDetailsService(userDetailsService)
                    .tokenValiditySeconds(60 * 60 * 24 * 30);
@@ -51,10 +56,6 @@ public class CustomSecurityConfig {
 //            authorize.requestMatchers("/api/user").authenticated()
 //                    .anyRequest().permitAll();
 //        });
-
-        http.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
-            httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(accessDeniedHandler());
-        });
 
         return http.build();
     }

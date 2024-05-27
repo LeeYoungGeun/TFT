@@ -25,7 +25,7 @@ public class Custom403Handler implements AccessDeniedHandler {
 
         if(contentType == null) {
             //알수없는 요청 페이지로 이동시켜야함
-            response.sendRedirect("/member/login?error=ANNOWN");
+            response.sendRedirect("/member/login?error=UN_KNOWN");
         }else {
             boolean jsonRequest = contentType.startsWith("application/json");
             log.info("is json : " + jsonRequest);

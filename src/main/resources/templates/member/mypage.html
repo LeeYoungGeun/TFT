@@ -22,7 +22,7 @@
 
 <script layout:fragment="script" th:inline="javascript">
 
-    const userLogininfoName = `[[${#authentication.name}]]`;
+    const userLogininfoName = [[${#authentication.name}]];
 
     if (userLogininfoName){
         document.querySelector(".welcome").innerHTML = userLogininfoName + "님 환영합니다.";
@@ -40,8 +40,8 @@
         e.preventDefault()
         e.stopPropagation()
 
-        confirm("정말 삭제하시겠습니까?")
 
+    if(confirm("정말 삭제하시겠습니까?")){
         let form = document.createElement("form");
         form.setAttribute("charset", "UTF-8");
         form.setAttribute("method", "Post");  //Post 방식
@@ -55,6 +55,8 @@
 
         document.body.appendChild(form);
         form.submit();
+    }
+
     }, false)
 
 </script>
