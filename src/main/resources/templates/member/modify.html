@@ -19,11 +19,11 @@
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">이름</span>
-                        <input type="text" name="mname" class="form-control" readonly>
+                        <input type="text" name="mname" class="form-control" th:value="${mInfo.mname}" readonly>
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">닉네임</span>
-                        <input type="text" name="mnick" class="form-control">
+                        <input type="text" name="mnick"  th:value="${mInfo.mnick}" class="form-control">
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">비밀번호</span>
@@ -31,11 +31,11 @@
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">이메일</span>
-                        <input type="email" name="memail" class="form-control" required>
+                        <input type="email" name="memail" class="form-control"  th:value="${mInfo.memail}" required>
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">핸드폰 번호</span>
-                        <input type="text" name="mpno" class="form-control" required>
+                        <input type="text" name="mpno" class="form-control"  th:value="${mInfo.mpno}" required>
                     </div>
                     <div class="input-group mb-3">
                         <span style="color: red"> - 를 제거하고 입력해주세요</span>
@@ -56,6 +56,10 @@
 
 <script layout:fragment="script" th:inline="javascript">
 
+    const mid = [[${mid}]];
+    if (mid){
+        document.forms[0].querySelector('input[name="mid"]').value = mid;
+    }
 
     document.querySelector(".listBtn").addEventListener("click", function (e) {
         e.preventDefault()

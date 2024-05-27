@@ -22,4 +22,9 @@ public class Member extends BaseEntity{
     private String mpno;
     private boolean del;
 
+    //패스워드 변경 (세터 대신)
+    public  void changePassword(String mpw) {
+        this.mpw = mpw;
+    }
+
 }

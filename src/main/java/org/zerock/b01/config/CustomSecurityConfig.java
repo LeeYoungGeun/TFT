@@ -10,8 +10,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.zerock.b01.security.handler.Custom403Handler;
 
 import javax.sql.DataSource;
 
@@ -29,7 +31,9 @@ public class CustomSecurityConfig {
         log.info("-----------------security configure--------------------");
         //로그인페이지 기본페이지에서 변경
         http.formLogin(form -> {
-            form.loginPage("/member/login");
+            form.loginPage("/member/login")
+                    //로그인 성공 기본 페이지
+                    .defaultSuccessUrl("/board/list");
         });
 
         //크롬 개발자도구 네트워크 >> 엘리먼트선택 >> 페이지로드 부분에서 확인가능한 csrf(사용자인증값) 비활성화
@@ -42,7 +46,23 @@ public class CustomSecurityConfig {
                    .tokenValiditySeconds(60 * 60 * 24 * 30);
         });
 
+        // 로그인 후 아래 경로로 이동되면서 정보가 확인됨
+//        http.authorizeHttpRequests(authorize -> {
+//            authorize.requestMatchers("/api/user").authenticated()
+//                    .anyRequest().permitAll();
+//        });
+
+        http.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
+            httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(accessDeniedHandler());
+        });
+
         return http.build();
+    }
+
+    //AccessDeniedHandler 빈등록
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return new Custom403Handler();
     }
 
     @Bean
@@ -58,5 +78,4 @@ public class CustomSecurityConfig {
         repo.setDataSource(dataSource);
         return repo;
     }
-
 }

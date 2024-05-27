@@ -49,9 +49,10 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="/member/join">회원가입</a></li>
-                        <li class="nav-item active"><a class="nav-link" href="/member/login">로그인</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/member/logout">로그아웃</a></li>
+
+                        <li class="nav-item isJoin" ><a class="nav-link" href="/member/join">회원가입</a></li>
+                        <li class="nav-item isLogin"><a class="nav-link" href="/member/login">로그인</a></li>
+                        <li class="nav-item isLogout"><a class="nav-link" href="/logout">로그아웃</a></li>
                         <!--<li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -65,6 +66,8 @@
                 </div>
             </div>
         </nav>
+
+        <input type="text" id="user-info"/>
         <!-- Page content--> <!-- 여기에 layout 적용... layout:fragment -->
         <div class="container-fluid" layout:fragment="content">
 
@@ -81,8 +84,25 @@
         <span class="text-muted">더 파이팅 프로젝트</span>
     </div>
 </footer>
+
+<script>
+    const userLoginName = "[[${#authentication.name}]]";
+    //로그인이 안된 상황
+    if (userLoginName === "anonymousUser"){
+        document.querySelector('.isLogin').style.visibility = 'visible';
+        document.querySelector('.isLogout').style.visibility = 'hidden';
+        //로그인이 된 상황
+    }else {
+        document.querySelector('.isLogin').style.visibility = 'hidden';
+        document.querySelector('.isLogout').style.visibility = 'visible';
+    }
+</script>
+
 <th:block layout:fragment="script">
     <!-- 스크립트 작업 내용을 추가할 때 사용 -->
+
 </th:block>
+
+
 </body>
 </html>

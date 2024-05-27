@@ -12,7 +12,7 @@ import org.zerock.b01.config.PasswordEncoderConfig;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailsService implements UserDetailsService {
+class CustomUserDetailsService implements UserDetailsService {
 
     private final PasswordEncoderConfig passwordEncoderConfig;
     //private PasswordEncoder passwordEncoder;  // 주입하면 순환구조 발생 final 제거
@@ -21,10 +21,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("loadUserByUsername  : " + username);
 
-        //userDeatils 객체로 반환하는 userDetails를 생성
+        //userDeatils 객체로 반환하는 userDetails를 생성 (모든 로그인처리가 user1로 처리됨)
         UserDetails userDetails = User.builder().username("user1")
-                .password(passwordEncoderConfig.passwordEncoder().encode("1111")).authorities("ROLE_USER").build();
-
+                .password(passwordEncoderConfig.passwordEncoder().encode("1234")).authorities("ROLE_USER").build();
         return userDetails;
     }
 }

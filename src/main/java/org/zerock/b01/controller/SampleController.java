@@ -14,7 +14,20 @@ public class SampleController {
         log.info("hello ..........................");
 
         model.addAttribute("msg", "HELLO WORLD!!!");
+    }
 
+    @GetMapping("/index")
+    public void index(Model model) {
+        log.info("index ..........................");
+
+        model.addAttribute("msg", "index!!!");
+    }
+
+    @GetMapping("/layout/basic")
+    public void basic(Model model) {
+        log.info("basic ..........................");
+
+        model.addAttribute("msg", "basic!!!");
     }
 
 }
