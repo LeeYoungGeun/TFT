@@ -5,7 +5,7 @@
       layout:decorate="~{layout/basic.html}">
 
 <head>
-  <title>Board Read</title>
+  <title>게시판</title>
 
   <style>
     .card-img-top {
@@ -37,6 +37,18 @@
       margin-right: 10px;
     }
 
+    .header-text {
+        font-weight: bold;
+    }
+
+    .btn-clicked {
+        background-color: lightcyan;
+    }
+
+    .btn-modify {display:inline-block;}
+    .btn-modify:after {display: inline-block;
+    content: "\00d7"; font-size:20px; margin-left:5px;}
+
   </style>
 </head>
 
@@ -45,15 +57,15 @@
     <div class="col">
       <div class="card">
         <div class="card-header">
-          Board Read
+          게시판
         </div>
         <div class="card-body">
           <div class="input-group mb-3">
-            <span class="input-group-text">Bno</span>
+            <span class="input-group-text">번호</span>
             <input type="text" class="form-control" th:value="${dto.bno}" readonly>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text">Title</span>
+            <span class="input-group-text">제목</span>
             <input type="text" class="form-control" th:value="${dto.title}" readonly>
           </div>
 
@@ -64,21 +76,21 @@
           </div>
 
           <div class="input-group mb-3">
-            <span class="input-group-text">Content</span>
+            <span class="input-group-text">내용</span>
             <textarea class="form-control col-sm-5" rows="5" readonly>[[${dto.content}]]</textarea>
           </div>
 
           <div class="input-group mb-3">
-            <span class="input-group-text">Writer</span>
+            <span class="input-group-text">작성자</span>
             <input type="text" class="form-control" th:value="${dto.writer}" readonly>
           </div>
 
           <div class="input-group mb-3">
-            <span class="input-group-text">RegDate</span>
+            <span class="input-group-text">작성일</span>
             <input type="text" class="form-control" th:value="${#temporals.format(dto.regDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text">ModDate</span>
+            <span class="input-group-text">수정일</span>
             <input type="text" class="form-control" th:value="${#temporals.format(dto.modDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
           </div>
 
@@ -124,10 +136,22 @@
   <div class="row mt-3">
     <div class="col-md-12">
       <div class="my-4">
-        <button class="btn btn-info addReplyBtn">ADD REPLY</button>
+        <button class="btn btn-info addReplyBtn">댓글등록</button>
       </div>
-      <ul class="list-group replyList">
-      </ul>
+
+      <table class="table table-striped">
+        <thead>
+            <tr>
+              <th scope="col">번호</th>
+              <th scope="col">내용</th>
+              <th scope="col">작성자</th>
+              <th scope="col">작성일</th>
+              <th scope="col">수정</th>
+            </tr>
+        </thead>
+        <tbody class="replyList">
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -205,6 +229,8 @@
 
 <script layout:fragment="script" th:inline="javascript">
 
+  const currentUser = [[${#authentication.principal.username}]]
+
   // 댓글 목록 처리...
   const bno = [[${dto.bno}]]
 
@@ -216,12 +242,15 @@
 
     if(dtoList && dtoList.length > 0) {
       for (const dto of dtoList) {
-        str +=`<li class="list-group-item d-flex replyItem">
-              <span class="col-2">${dto.rno}</span>
-              <span class="col-6" data-rno="${dto.rno}">${dto.replyText}</span>
-              <span class="col-2">${dto.replyer}</span>
-              <span class="col-2">${dto.regDate}</span>
-              </li>`
+        str += `<tr class="replyItem">
+          <td class="col-1">${dto.rno}번</td>
+          <td class="col-4" data-rno="${dto.rno}">${dto.replyText}</td>
+          <td class="col-2">${dto.replyer}</td>
+          <td class="col-2">${dto.regDate}</td>
+          <td class="col-1">
+            <button type="button" class="btn-clicked" data-rno="${dto.rno}">수정</button>
+          </td>
+        </tr>`
       }
     }
     replyList.innerHTML = str
@@ -294,16 +323,17 @@
     const replyObj = {
       bno:bno,
       replyText:replyText.value,
-      replyer:replyer.value}
+      replyer:currentUser
+    }
 
     addReply(replyObj).then(result => {
-      alert(result.rno)
+      alert('등록이 완료되었습니다.')
       registerModal.hide()
       replyText.value = ''
-      replyer.value = ''
+      replyer.value = currentUser
       printReplies(1,10, true) // 댓글목록갱신
     }).catch(e => {
-      alert("Exception...")
+      alert("등록을 실패하였습니다.")
     })
   }, false)
 
@@ -346,7 +376,7 @@
 
     const target = e.target
 
-    if(!target || target.tagName != 'SPAN'){
+    if(!target || target.tagName != 'BUTTON'){
       return
     }
 
@@ -372,7 +402,7 @@
   modifyBtn.addEventListener("click", function (e) {
 
     if(!hasAuth){
-      alert("관리자만 수정이 가능합니다.")
+      alert("작성자만 수정이 가능합니다.")
       modifyModal.hide()
       return
     }
@@ -400,7 +430,6 @@
     modifyModal.hide()
   }, false)
 
-  //삭제
   removeBtn.addEventListener("click", function (e) {
     removeReply(replyHeader.innerHTML).then(result => {
       //result에 값이 있는 경우 : AccessDenied 오류가 발생하여
@@ -423,6 +452,12 @@
       console.log(e)
     })
   },false)
+
+  document.querySelectorAll('.modifyModayBtn').forEach(button => {
+    button.addEventListener('click', function () {
+      button.classList.toggle('btn-clicked')
+    })
+  })
 
 </script>
 

@@ -12,12 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.zerock.b01.domain.Board;
 import org.zerock.b01.domain.BoardImage;
-import org.zerock.b01.dto.BoardDTO;
-import org.zerock.b01.dto.BoardListReplyCountDTO;
-import org.zerock.b01.dto.PageRequestDTO;
-import org.zerock.b01.dto.PageResponseDTO;
+import org.zerock.b01.dto.*;
 import org.zerock.b01.service.BoardService;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
