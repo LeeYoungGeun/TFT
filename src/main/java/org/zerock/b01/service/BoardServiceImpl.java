@@ -9,8 +9,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.zerock.b01.domain.Board;
+import org.zerock.b01.domain.BoardLike;
+import org.zerock.b01.domain.Member;
 import org.zerock.b01.dto.*;
+import org.zerock.b01.repository.BoardLikeRepository;
 import org.zerock.b01.repository.BoardRepository;
+import org.zerock.b01.repository.MemberRespository;
+import org.zerock.b01.repository.ReplyRepository;
 
 
 import java.util.List;
@@ -26,6 +31,9 @@ public class BoardServiceImpl implements BoardService {
     private final ModelMapper modelMapper;
 
     private final BoardRepository boardRepository;
+    private final MemberRespository memberRespository;
+    private final BoardLikeRepository boardLikeRepository;
+    private final ReplyRepository replyRepository;
 
     @Override
     public Long register(BoardDTO boardDTO) {
@@ -71,6 +79,12 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void remove(Long bno) {
+        Board board = boardRepository.findById(bno).orElseThrow(() -> new IllegalArgumentException("잘못된 게시글 입니다."));
+
+        boardLikeRepository.deleteByBoard(board);
+
+        replyRepository.deleteByBoard(board);
+
         boardRepository.deleteById(bno);
     }
 
@@ -125,6 +139,28 @@ public class BoardServiceImpl implements BoardService {
                 .build();
     }
 
+    @Override
+    public void likeBoard(BoardLikeDTO boardLikeDTO) {
+        Board board = boardRepository.findById(boardLikeDTO.getBoard_bno()).orElseThrow(() -> new IllegalArgumentException("잘못된 게시판 입니다."));
+        Member member = memberRespository.findById(boardLikeDTO.getMember_mid()).orElseThrow(() -> new IllegalArgumentException("잘못된 ID 입니다."));
+
+        Optional<BoardLike> existingLike = boardLikeRepository.findByBoardAndMember(board, member);
+        if(existingLike.isPresent()){
+            boardLikeRepository.delete(existingLike.get());
+        }else{
+            BoardLike boardLike = BoardLike.builder()
+                    .board(board)
+                    .member(member)
+                    .build();
+            boardLikeRepository.save(boardLike);
+        }
+    }
+
+    @Override
+    public int countLikes(Long board_bno) {
+        Board board = boardRepository.findById(board_bno).orElseThrow(() -> new IllegalArgumentException("잘못된 게시판 입니다."));
+        return boardLikeRepository.countByBoard(board);
+    }
 
 
 }

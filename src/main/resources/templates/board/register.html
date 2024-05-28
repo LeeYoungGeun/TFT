@@ -18,7 +18,7 @@
                     <form action="/board/register" method="post">
                         <div class="input-group mb-3">
                             <span class="input-group-text">제목</span>
-                            <input type="text" name="title" class="form-control" placeholder="Title">
+                            <input type="text" name="title" class="form-control" placeholder="제목">
                         </div>
 
                         <div class="input-group mb-3">
@@ -28,14 +28,15 @@
 
                         <div class="input-group mb-3">
                             <span class="input-group-text">작성자</span>
-                            <input type="text" name="writer" class="form-control" placeholder="Writer">
+                            <input type="text" name="writer" class="form-control" placeholder="Writer"
+                                   th:value="${#authentication.principal.username}" readonly>
 
                         </div>
 
                         <div class="input-group mb-3">
                             <span class="input-group-text">이미지</span>
                             <div class="float-end uploadHidden">
-                                <button type="button" class="btn btn-primary uploadFileBtn">이미지 등록</button>
+                                <button type="button" class="btn btn-primary uploadFileBtn">첨부</button>
                             </div>
                         </div>
 

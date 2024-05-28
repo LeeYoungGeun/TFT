@@ -2,9 +2,11 @@ package org.zerock.b01.service;
 
 
 import org.zerock.b01.domain.Board;
+import org.zerock.b01.domain.BoardLike;
 import org.zerock.b01.dto.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -63,4 +65,10 @@ public interface BoardService {
 
         return boardDTO;
     }
+
+    void likeBoard(BoardLikeDTO boardLikeDTO);
+
+    int countLikes(Long board_bno);
+
+
 }

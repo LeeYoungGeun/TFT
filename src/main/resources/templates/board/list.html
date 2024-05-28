@@ -3,9 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/basic.html}">
 
-<head>
-    <link href="/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-</head>
+
 
 <body>
 <div layout:fragment="content">
@@ -92,7 +90,6 @@
                 </div>
                 <div class="modal-body" style="text-align: center">
                     <p th:if="${result == 'register'}">게시글이 성공적으로 등록되었습니다.</p>
-                    <p th:if="${result == 'modified'}">게시글이 성공적으로 수정되었습니다.</p>
                     <p th:if="${result == 'removed'}">게시글이 성공적으로 삭제되었습니다.</p>
                 </div>
                 <div class="modal-footer">

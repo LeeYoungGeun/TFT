@@ -2,6 +2,7 @@ package org.zerock.b01.controller;
 
 
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.b01.domain.Board;
 import org.zerock.b01.dto.*;
@@ -51,6 +53,8 @@ public class BoardController {
 
         model.addAttribute("responseDTO", responseDTO);
     }
+
+
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/register")
@@ -86,7 +90,11 @@ public class BoardController {
     public void read(Long bno, PageRequestDTO pageRequestDTO, Model model){
         BoardDTO boardDTO = boardService.readOne(bno);
         log.info(boardDTO);
+
+        int likes = boardService.countLikes(bno);
+
         model.addAttribute("dto",boardDTO);
+        model.addAttribute("likes", likes);
     }
 
     @PreAuthorize("principal.username==#boardDTO.writer")
@@ -154,6 +162,20 @@ public class BoardController {
 
         }
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/like")
+    public String likeBoard(@RequestParam("bno")Long bno, @RequestParam("member_mid")String member_mid, RedirectAttributes redirectAttributes){
+        BoardLikeDTO boardLikeDTO = new BoardLikeDTO();
+        boardLikeDTO.setBoard_bno(bno);
+        boardLikeDTO.setMember_mid(member_mid);
+
+        boardService.likeBoard(boardLikeDTO);
+
+        redirectAttributes.addAttribute("bno", bno);
+        return "redirect:/board/read";
+    }
+
 
 
 }
