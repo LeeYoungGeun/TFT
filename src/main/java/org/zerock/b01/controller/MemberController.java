@@ -46,7 +46,7 @@ public class MemberController {
             return "error/unknown_hdr.html";
         }
 
-        //·Î±×ÀÎÇÑ »ç¿ëÀÚ°¡ ·Î±×ÀÎÆäÀÌÁö·Î Á¢±Ù ½Ã Ã³¸® (ÄÁÆ®·Ñ·¯¿¡¼­ Ã³¸®ÇÏ´Â¹æ¹ı)
+        //ë¡œê·¸ì¸í•œ ì‚¬ìš©ìê°€ ë¡œê·¸ì¸í˜ì´ì§€ë¡œ ì ‘ê·¼ ì‹œ ì²˜ë¦¬ (ì»¨íŠ¸ë¡¤ëŸ¬ì—ì„œ ì²˜ë¦¬í•˜ëŠ”ë°©ë²•)
         Authentication authentication   = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
         log.info(principal);
@@ -54,7 +54,7 @@ public class MemberController {
         log.info(authentication.getAuthorities());
 
         if (!principal.equals("anonymousUser")) {
-            //board/list È­¸é¿¡ °ª »Ñ·ÁÁÖ¾î È­¸é¿¡¼­ alertÃ³¸®
+            //board/list í™”ë©´ì— ê°’ ë¿Œë ¤ì£¼ì–´ í™”ë©´ì—ì„œ alertì²˜ë¦¬
             redirectAttributes.addFlashAttribute("allready", "already logged in");
             return "redirect:/board/list";
         }else {
