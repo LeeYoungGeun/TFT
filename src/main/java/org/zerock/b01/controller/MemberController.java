@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.b01.domain.Member;
 import org.zerock.b01.dto.MemberJoinDTO;
@@ -34,16 +35,18 @@ public class MemberController {
 
         model.addAttribute("msg", "mypage");
     }
-    @GetMapping("/login")
+
+    @RequestMapping(value = "/login", method = {RequestMethod.GET})
     public String login(Model model, RedirectAttributes redirectAttributes, String error) {
         log.info("login ..........................");
         log.info("error : "  + error);
 
         if (error != null && error.equals("ACCESS_DENIED")){
             log.info("ACCESS_DENIED ..........................");
-            return "error/403_hdr.html";
+            return "/error/403_hdr";
         } else  if (error != null && error.equals("UN_KNOWN")){
-            return "error/unknown_hdr.html";
+            log.info("UN_KNOWN................................");
+            return "/error/unknown_hdr";
         }
 
         //로그인한 사용자가 로그인페이지로 접근 시 처리 (컨트롤러에서 처리하는방법)

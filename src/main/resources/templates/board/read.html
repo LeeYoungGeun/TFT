@@ -154,9 +154,9 @@
             <input type="text" class="form-control replyText">
           </div>
 
-          <div class="input-group mb-3">
+          <div class="input-group mb-3" th:with="user=${#authentication.principal}">
             <span class="input-group-text">작성자</span>
-            <input type="text" class="form-control replyer">
+            <input type="text" class="form-control replyer" th:value="${user.username}" readonly>
           </div>
         </div>
 
@@ -336,6 +336,8 @@
   const removeBtn = document.querySelector(".removeBtn")
   const closeModifyBtn = document.querySelector(".closeModifyBtn")
 
+  let hasAuth = false
+
   // 댓글 클릭시 수정
   replyList.addEventListener("click", function (e) {
 
@@ -360,11 +362,20 @@
       replyHeader.innerHTML = reply.rno
       modifyText.value = reply.replyText
       modifyModal.show()
+
+      hasAuth = currentUser === reply.replyer
+
     }).catch(e => alert('error'))
   }, false)
 
   // 댓글 수정 후 출력 화면에 대한
   modifyBtn.addEventListener("click", function (e) {
+
+    if(!hasAuth){
+      alert("관리자만 수정이 가능합니다.")
+      modifyModal.hide()
+      return
+    }
 
     const replyObj = {
       bno:bno,
@@ -374,33 +385,40 @@
 
     // 수정됨을 알리는 창
     modifyReply(replyObj).then(result => {
-      alert(result.rno+'댓글이 수정되었습니다.')
+      alert('댓글이 수정되었습니다.')
       replyText.value = ''
       modifyModal.hide()
       printReplies(page, size)
 
     }).catch(e =>
-      console.log(e)
+            console.log(e)
     )
-    },false)
+  },false)
 
 
   closeModifyBtn.addEventListener("click", function (e) {
     modifyModal.hide()
   }, false)
 
+  //삭제
   removeBtn.addEventListener("click", function (e) {
-
     removeReply(replyHeader.innerHTML).then(result => {
-
-      alert(result.rno +'댓글이 삭제되었습니다.')
-      replyText.value =''
-      modifyModal.hide()
-
-      page = 1
-
-      printReplies(page, size)
-
+      //result에 값이 있는 경우 : AccessDenied 오류가 발생하여
+      // CustomSecurityConfig에서 등록한 Custom403Handler로 들어가게되고
+      // memberController login메서드로 error param에 값을 실어서 호출하고 error page(view)를 리턴하는데
+      // 현재부분에서 error 페이지를 리다이렉팅 하지못하는 문제가 있으나,
+      // result를 출력했을 때 html 소스코드가 찍혀 현재 html을 찍힌 코드로 변경처리해줌
+      if(result !== "" ){
+        alert("관리자 계정만 삭제가 가능합니다.")
+        modifyModal.hide()
+        document.open();
+        document.write(result);
+      }else {
+        replyText.value =''
+        modifyModal.hide()
+        page = 1
+        printReplies(page, size)
+      }
     }).catch(e => {
       console.log(e)
     })

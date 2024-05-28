@@ -1,10 +1,14 @@
 package org.zerock.b01.controller;
 
-import groovy.util.logging.Log4j2;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +20,6 @@ import org.zerock.b01.service.ReplyService;
 import java.util.HashMap;
 import java.util.Map;
 
-@lombok.extern.log4j.Log4j2
 @RestController
 @RequestMapping("/replies")
 @Log4j2
@@ -72,23 +75,20 @@ public class ReplyController {
     }
 
 
-    @Operation(summary = "Delete Reply - DELETE 방식으로 특정 댓글 삭제하기")
-    @DeleteMapping("/{rno}")
-    public Map<String,Long> remove( @PathVariable("rno") Long rno ) {
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(value = "/remove/{rno}")
+    public void remove(@PathVariable("rno") Long rno ) {
+        log.info("remove--------------------------------------");
         replyService.remove(rno);
-
-        Map<String,Long> resultMap = new HashMap<>();
-
-        resultMap.put("rno", rno);
-
-        return resultMap;
     }
 
 
     @Operation(summary = "Modify Reply - PUT 방식으로 특정 댓글 수정하기")
     @PutMapping("/{rno}")
-    public Map<String,Long> remove(@PathVariable("rno") Long rno, @RequestBody ReplyDTO replyDTO) {
+    public Map<String,Long> modify(@PathVariable("rno") Long rno, @RequestBody ReplyDTO replyDTO) {
+
+        log.info("modify--------------------------------------");
+        log.info(rno);
 
         replyDTO.setRno(rno);
 

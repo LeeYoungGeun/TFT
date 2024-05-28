@@ -30,4 +30,18 @@ public class SampleController {
         model.addAttribute("msg", "basic!!!");
     }
 
+    @GetMapping("/error/403_hdr")
+    public void hdr_404(Model model) {
+        log.info("403 ..........................");
+
+        model.addAttribute("403", "403!!!");
+    }
+
+    @GetMapping("/error/unknown_hdr")
+    public void hdr_unknown(Model model) {
+        log.info("unknown ..........................");
+
+        model.addAttribute("unknown", "unknown!!!");
+    }
+
 }
