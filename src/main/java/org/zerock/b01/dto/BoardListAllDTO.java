@@ -19,6 +19,7 @@ public class BoardListAllDTO {
     private String writer;
     private LocalDateTime regDate;
     private Long replyCount;
+    private Long likeCount;
 
     private List<BoardImageDTO> boardImages;
 }

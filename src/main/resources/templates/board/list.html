@@ -36,17 +36,18 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    Board List
+                  <h4 style="text-align: center">더쿠 게시판</h4>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Board List </h5>
+
                     <table class="table">
                         <thead>
                         <tr>
-                            <th scope="col">Bno</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Writer</th>
-                            <th scope="col">RegDate</th>
+                            <th scope="col">번호</th>
+                            <th scope="col">제목</th>
+                            <th scope="col">작성자</th>
+                            <th scope="col">추천</th>
+                            <th scope="col">작성일</th>
                         </tr>
                         </thead>
                         <tbody th:with="link = ${pageRequestDTO.getLink()}">
@@ -57,6 +58,7 @@
                                 <span class="badge progress-bar-success" style="background-color:#0a53be">[[${dto.replyCount}]]</span>
                             </td>
                             <td>[[${dto.writer}]]</td>
+                            <td>[[${dto.likeCount}]]</td>
                             <td>[[${#temporals.format(dto.regDate, 'yyyy-MM-dd')}]]</td>
                         </tr>
                         </tbody>

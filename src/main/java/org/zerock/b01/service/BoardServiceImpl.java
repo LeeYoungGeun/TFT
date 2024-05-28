@@ -132,6 +132,11 @@ public class BoardServiceImpl implements BoardService {
 
         Page<BoardListAllDTO> result = boardRepository.searchWithAll(types, keyword, pageable);
 
+        for (BoardListAllDTO dto : result.getContent()) {
+            Long likeCount = (long) countLikes(dto.getBno());
+            dto.setLikeCount(likeCount);
+        }
+
         return PageResponseDTO.<BoardListAllDTO>withAll()
                 .pageRequestDTO(pageRequestDTO)
                 .dtoList(result.getContent())
