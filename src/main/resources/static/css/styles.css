@@ -303,7 +303,7 @@ svg {
 
 table {
   caption-side: bottom;
-  border-collapse: collapse;
+  /*border-collapse: collapse;*/
 }
 
 caption {
@@ -314,6 +314,7 @@ caption {
 }
 
 th {
+  font-weight: 500;
   text-align: inherit;
   text-align: -webkit-match-parent;
 }
@@ -1970,6 +1971,7 @@ progress {
   color: #212529;
   vertical-align: top;
   border-color: #dee2e6;
+  font-weight: 300;
 }
 .table > :not(caption) > * > * {
   padding: 0.5rem 0.5rem;
@@ -2236,7 +2238,7 @@ progress {
   opacity: 1;
 }
 .form-control:disabled, .form-control[readonly] {
-  background-color: #e9ecef;
+  background-color: #f8f9fa;
   opacity: 1;
 }
 .form-control::-webkit-file-upload-button {
@@ -3119,9 +3121,9 @@ textarea.form-control-lg {
 }
 
 .btn-info {
-  color: #000;
-  background-color: #0dcaf0;
-  border-color: #0dcaf0;
+  color: white;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
 }
 .btn-info:hover {
   color: #000;
@@ -4566,7 +4568,8 @@ textarea.form-control-lg {
 .card-header {
   padding: 0.5rem 1rem;
   margin-bottom: 0;
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: #0d6efd;
+  color: white;
   border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
 .card-header:first-child {
@@ -6862,7 +6865,7 @@ textarea.form-control-lg {
 }
 
 .border-end {
-  border-right: 1px solid #dee2e6 !important;
+  /*border-right: 1px solid #dee2e6 !important;*/
 }
 
 .border-end-0 {
@@ -6870,7 +6873,7 @@ textarea.form-control-lg {
 }
 
 .border-bottom {
-  border-bottom: 1px solid #dee2e6 !important;
+  /*border-bottom: 1px solid #dee2e6 !important;*/
 }
 
 .border-bottom-0 {
@@ -7491,7 +7494,7 @@ textarea.form-control-lg {
 }
 
 .py-5 {
-  padding-top: 3rem !important;
+  padding-top: 10rem !important;
   padding-bottom: 3rem !important;
 }
 
@@ -7837,7 +7840,7 @@ textarea.form-control-lg {
 
 .bg-light {
   --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
+  /*background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;*/
 }
 
 .bg-dark {

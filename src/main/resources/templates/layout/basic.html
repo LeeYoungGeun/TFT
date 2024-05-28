@@ -34,10 +34,6 @@
         <div class="list-group list-group-flush">
             <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/member/mypage">마이페이지</a>
             <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/board/list">게시판</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Overview</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Events</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Profile</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Status</a>
         </div>
     </div>
     <!-- Page content wrapper-->
@@ -49,10 +45,14 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
-
-                        <li class="nav-item isJoin" ><a class="nav-link" href="/member/join">회원가입</a></li>
+                        <li>
+                            <button class="btn btn btn-primary isJoin" type="button" onclick="location.href='/member/join'" >회원가입</button>&nbsp;
+                            <button class="btn btn btn-primary isLogin" type="button" onclick="location.href='/member/login'" >로그인</button>
+                            <button class="btn btn btn-primary isLogout" type="button" onclick="location.href='/logout'" >로그아웃</button>
+                        </li>
+                        <!--<li class="nav-item isJoin" ><a class="nav-link" href="/member/join">회원가입</a></li>
                         <li class="nav-item isLogin"><a class="nav-link" href="/member/login">로그인</a></li>
-                        <li class="nav-item isLogout"><a class="nav-link" href="/logout">로그아웃</a></li>
+                        <li class="nav-item isLogout"><a class="nav-link" href="/logout">로그아웃</a></li>-->
                         <!--<li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -67,11 +67,56 @@
             </div>
         </nav>
 
-        <input type="text" id="user-info"/>
         <!-- Page content--> <!-- 여기에 layout 적용... layout:fragment -->
         <div class="container-fluid" layout:fragment="content">
 
         </div>
+        <!--footer start-->
+        <footer class="py-5">
+            <div class="row" style="padding-left: 30px;">
+                <div class="col-6 col-md-2 mb-3">
+                    <h5>Section</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-2 mb-3">
+                    <h5>Section</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-2 mb-3">
+                    <h5>Section</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-5 offset-md-1 mb-3">
+                    <form>
+                        <p>© 2023 Company, Inc. All rights reserved.</p>
+                        <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </footer>
+        <!--footer end-->
     </div>
 </div>
 <!-- Bootstrap core JS-->
@@ -79,22 +124,16 @@
 <!-- Core theme JS-->
 <script th:src="@{/js/scripts.js}"></script>
 
-<footer class="footer mt-auto py-3">
-    <div th:align="center" class="container">
-        <span class="text-muted">더 파이팅 프로젝트</span>
-    </div>
-</footer>
-
 <script>
     const userLoginName = "[[${#authentication.name}]]";
     //로그인이 안된 상황
     if (userLoginName === "anonymousUser"){
-        document.querySelector('.isLogin').style.visibility = 'visible';
-        document.querySelector('.isLogout').style.visibility = 'hidden';
+        document.querySelector('.isLogin').style.display = '';
+        document.querySelector('.isLogout').style.display = 'none';
         //로그인이 된 상황
     }else {
-        document.querySelector('.isLogin').style.visibility = 'hidden';
-        document.querySelector('.isLogout').style.visibility = 'visible';
+        document.querySelector('.isLogin').style.display = 'none';
+        document.querySelector('.isLogout').style.display = '';
     }
 </script>
 

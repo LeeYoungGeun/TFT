@@ -118,7 +118,7 @@ public class MemberController {
         return "redirect:/logout";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("principal.username==#memberJoinDTO.mid")
     @PostMapping("/remove")
     public String remove(Model model ,MemberJoinDTO memberJoinDTO) {
         log.info("remove..........................");
