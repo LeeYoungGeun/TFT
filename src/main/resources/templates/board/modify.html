@@ -107,6 +107,26 @@
         </div>
     </div><!-- register modal -->
 
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="delete">삭제 확인</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    정말 삭제하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="deleteBtn">삭제</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script src="/js/upload.js"></script>
@@ -146,7 +166,7 @@
 
         formObj.method ='post'
         formObj.submit()
-
+        alert("게시글이 수정 되었습니다.")
 
     }, false)
 
@@ -194,18 +214,27 @@
     }
 
 
-    document.querySelector(".removeBtn").addEventListener("click", function(e){
-        e.preventDefault()
-        e.stopPropagation()
+    document.querySelector(".removeBtn").addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        deleteModal.show();
+    }, false);
 
 
-        appendFileData()
-        appendNotShownData()
+    document.getElementById("deleteBtn").addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
 
-        formObj.action = `/board/remove`
-        formObj.method ='post'
-        formObj.submit()
-    }, false)
+
+        appendFileData();
+        appendNotShownData();
+
+
+        formObj.action = `/board/remove`;
+        formObj.method = 'post';
+        formObj.submit();
+    }, false);
 
     document.querySelector(".listBtn").addEventListener("click", function(e){
         e.preventDefault()
