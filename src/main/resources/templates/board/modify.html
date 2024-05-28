@@ -53,9 +53,9 @@
 
                         <div class="my-4" th:with="user=${#authentication.principal}">
                             <div class="float-end">
-                                <button type="button" class="btn btn-primary listBtn">List</button>
-                                <button th:if="${user != null && user.username == dto.writer}" type="button" class="btn btn-secondary modBtn">Modify</button>
-                                <button th:if="${user != null && user.username == dto.writer}" type="button" class="btn btn-danger removeBtn">Remove</button>
+                                <button type="button" class="btn btn-primary listBtn">게시판</button>
+                                <button th:if="${user != null && user.username == dto.writer}" type="button" class="btn btn-secondary modBtn">수정</button>
+                                <button th:if="${user != null && user.username == dto.writer}" type="button" class="btn btn-danger removeBtn">삭제</button>
                             </div>
                         </div>
                     </form>
@@ -100,8 +100,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary uploadBtn">Upload</button>
-                    <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal" >Close</button>
+                    <button type="button" class="btn btn-primary uploadBtn">등록</button>
+                    <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal" >닫기</button>
                 </div>
             </div>
         </div>
@@ -115,12 +115,12 @@
                     <h5 class="modal-title" id="delete">삭제 확인</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="text-align: center">
                     정말 삭제하시겠습니까?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" id="deleteBtn">삭제</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
