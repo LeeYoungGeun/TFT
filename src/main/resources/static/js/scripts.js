@@ -23,24 +23,3 @@ window.addEventListener('DOMContentLoaded', event => {
         });
     }
 });
-
-document.addEventListener('DOMContentLoaded', (event) => {
-    fetch('/api/user', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(error => { throw new Error(error.error); });
-            }
-            return response.json();
-        })
-        .then(user => {
-            document.getElementById('user-info').value = user.username;
-        })
-        .catch(error => {
-            document.getElementById('user-info').innerText = 'Error fetching user info: ' + error.message;
-        });
-});
