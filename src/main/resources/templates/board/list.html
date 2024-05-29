@@ -3,7 +3,17 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/basic.html}">
 
-
+<head>
+    <style>
+        .pagination .page-link {
+            cursor: pointer;
+            color: #0c63e4;
+        }
+        .pagination .page-link:hover {
+            color: #ffc107;
+        }
+    </style>
+</head>
 
 <body>
 <div layout:fragment="content">
@@ -66,7 +76,7 @@
                         <button type="button" class="btn btn-primary registerBtn">글 작성</button>
                     </div>
                     <div class="float-end">
-                        <ul class="pagination flex-wrap">
+                        <ul class="pagination .page-link:hover flex-wrap">
                             <li class="page-item" th:if="${responseDTO.prev}">
                                 <a class="page-link" th:data-num="${responseDTO.start - 1}">Previous</a>
                             </li>

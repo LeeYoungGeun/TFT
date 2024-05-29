@@ -14,9 +14,17 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
 
+    <style>
+        .center-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+    </style>
 </head>
 <body>
-    <section class="bg-light py-3 py-md-5">
+    <section class="center-container">
         <div class="container">
             <div class="child">
                 <div class="row justify-content-center">

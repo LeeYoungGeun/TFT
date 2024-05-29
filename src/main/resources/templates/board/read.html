@@ -199,10 +199,12 @@
     <div class="modal-dialog">
       <div class="modal-content">
 
+
         <div class="modal-header">
           <h5 class="modal-title replyHeader"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+
 
         <div class="modal-body">
           <div class="input-group mb-3">
@@ -443,6 +445,7 @@
         document.open();
         document.write(result);
       }else {
+        alert("삭제되었습니다.")
         replyText.value =''
         modifyModal.hide()
         page = 1
