@@ -118,10 +118,12 @@
     if (userLoginName === "anonymousUser"){
         document.querySelector('.isLogin').style.display = '';
         document.querySelector('.isLogout').style.display = 'none';
+        document.querySelector('.isJoin').style.display = '';
         //로그인이 된 상황
     }else {
         document.querySelector('.isLogin').style.display = 'none';
         document.querySelector('.isLogout').style.display = '';
+        document.querySelector('.isJoin').style.display = 'none';
     }
 </script>
 
