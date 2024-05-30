@@ -12,6 +12,33 @@
         .pagination .page-link:hover {
             color: #0d6efd;
         }
+        table {
+            table-layout: fixed;
+            width: 100%;
+        }
+        th, td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        th:nth-child(1) { width: 10%;}
+        th:nth-child(2) { width: 50%;}
+        th:nth-child(3) { width: 15%;}
+        th:nth-child(4) { width: 10%;}
+        th:nth-child(5) { width: 15%;}
+
+        th {
+            font-weight: bold;
+        }
+
+        th {
+            font-weight: normal;
+        }
+
+        a:visited {
+            color: #6c757d; /* 방문한 링크의 색상 변경 */
+        }
+
     </style>
 </head>
 
@@ -52,16 +79,16 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th scope="col">번호</th>
-                            <th scope="col">제목</th>
-                            <th scope="col">작성자</th>
-                            <th scope="col">추천</th>
-                            <th scope="col">작성일</th>
+                            <th scope="col" style="font-weight: bold">번호</th>
+                            <th scope="col" style="font-weight: bold">제목</th>
+                            <th scope="col" style="font-weight: bold">작성자</th>
+                            <th scope="col" style="font-weight: bold">추천</th>
+                            <th scope="col" style="font-weight: bold">작성일</th>
                         </tr>
                         </thead>
                         <tbody th:with="link = ${pageRequestDTO.getLink()}">
                         <tr th:each="dto:${responseDTO.dtoList}">
-                            <th scope="row">[[${dto.bno}]]</th>
+                            <th scope="row" style="font-weight: normal">[[${dto.bno}]]</th>
                             <td>
                                 <a th:href="|@{/board/read(bno =${dto.bno})}&${link}|" class="text-decoration-none"> [[${dto.title}]] </a>
                                 <span class="badge progress-bar-success" style="background-color:#0a53be">[[${dto.replyCount}]]</span>
