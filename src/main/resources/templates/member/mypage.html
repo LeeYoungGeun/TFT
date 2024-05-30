@@ -13,7 +13,7 @@
     <br>
     <br>
     <br>
-    <h2 class="welcome" style="text-align: center"> xxx님 반갑습니다. </h2>
+    <h2 class="welcome" style="text-align: center"></h2>
     <br>
 
     <div class="col-lg-6 col-xxl-4 my-5 mx-auto">
@@ -36,7 +36,7 @@
         e.preventDefault()
         e.stopPropagation()
 
-        self.location = '/member/modify'
+        self.location = '/member/checkPw'
 
     }, false)
 
@@ -44,23 +44,7 @@
         e.preventDefault()
         e.stopPropagation()
 
-
-    if(confirm("정말 삭제하시겠습니까?")){
-        let form = document.createElement("form");
-        form.setAttribute("charset", "UTF-8");
-        form.setAttribute("method", "Post");  //Post 방식
-        form.setAttribute("action", "/member/remove"); //요청 보낼 주소
-
-        let hiddenField = document.createElement("input");
-        hiddenField.setAttribute("type", "hidden");
-        hiddenField.setAttribute("name", "mid");
-        hiddenField.setAttribute("value", userLogininfoName);
-        form.appendChild(hiddenField);
-
-        document.body.appendChild(form);
-        form.submit();
-    }
-
+        self.location = '/member/checkPw?isRemoveReq=true'
     }, false)
 
 </script>

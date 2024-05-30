@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+<head>
+    <title>checkPw</title>
+</head>
+
+<div layout:fragment="content">
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h2 class="welcome" style="text-align: center"></h2>
+    <br>
+
+    <form id="pwCheckForm" action="/member/checkPw" method="post">
+        <div class="col-lg-6 col-xxl-4 my-5 mx-auto">
+            <div class="d-grid gap-2">
+                <div class="input-group mb-3" style="">
+                    <span class="input-group-text">비밀번호</span>
+                    <input type="password" name="mpw" id="mpw" class="form-control" required />
+                    <button class="btn btn-primary pwCheckBtn" type="button">확인</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+    const checkPw = [[${checkPw}]];
+    // 비밀번호 확인 실패 시
+    if (checkPw && checkPw == 'pwError'){
+        alert("비밀번호가 틀렸습니다.")
+    }
+
+    //삭제인지 구분
+    const isRemoveReq = [[${isRemoveReq}]];
+
+    //로그인한 ID
+    const userLogininfoName = [[${#authentication.name}]];
+
+    if (isRemoveReq && isRemoveReq === true){
+        document.querySelector(".welcome").innerHTML = userLogininfoName + "님 환영합니다. 비밀번호 체크 후 회원탈퇴됩니다.";
+    }else {
+        if (userLogininfoName){
+            document.querySelector(".welcome").innerHTML = userLogininfoName + "님 환영합니다.";
+        }
+    }
+
+    document.querySelector(".pwCheckBtn").addEventListener("click", function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        if (isRemoveReq && isRemoveReq === true){
+            if(confirm("정말 삭제하시겠습니까?")) {
+                let form = document.forms["pwCheckForm"];
+                let hiddenField1 = document.createElement("input");
+                hiddenField1.setAttribute("type", "hidden");
+                hiddenField1.setAttribute("name", "isRemoveReq");
+                hiddenField1.setAttribute("value", true);
+                let hiddenField2 = document.createElement("input");
+                hiddenField2.setAttribute("type", "hidden");
+                hiddenField2.setAttribute("name", "mid");
+                hiddenField2.setAttribute("value", userLogininfoName);
+                form.appendChild(hiddenField1);
+                form.appendChild(hiddenField2);
+                form.submit();
+            }
+        }else {
+            document.forms["pwCheckForm"].submit();
+        }
+    }, false)
+</script>
+
+</html>

@@ -97,6 +97,11 @@
     const urlParams = url.searchParams;
     // URLSearchParams.get()
     const paramResult_join = urlParams.get('join');
+    const error = urlParams.get('error');
+
+    if (error != null && error == '' ){
+        alert("비밀번호 혹은 아이디를 잘못 입력하셨습니다.")
+    }
 
     if (paramResult_join && paramResult_join == 'join_success'){
        alert("회원가입을 완료했습니다.")

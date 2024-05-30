@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.zerock.b01.config.PasswordEncoderConfig;
 import org.zerock.b01.domain.Member;
 import org.zerock.b01.dto.MemberJoinDTO;
 import org.zerock.b01.service.MemberService;
@@ -26,6 +27,9 @@ public class MemberController {
 
     @Autowired
     MemberService memberService;
+
+    @Autowired
+    PasswordEncoderConfig passwordEncoderConfig;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage")
@@ -107,7 +111,6 @@ public class MemberController {
             model.addAttribute("mid", authentication.getName());
         }
         model.addAttribute("mInfo", detail);
-
     }
 
     @PreAuthorize("principal.username==#memberJoinDTO.mid")
@@ -121,12 +124,60 @@ public class MemberController {
         return "redirect:/logout";
     }
 
-    @PreAuthorize("principal.username==#memberJoinDTO.mid")
-    @PostMapping("/remove")
-    public String remove(Model model ,MemberJoinDTO memberJoinDTO) {
-        log.info("remove..........................");
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/checkPw")
+    public void checkPw(Model model , boolean isRemoveReq) {
+        log.info("checkPw..........................");
+        log.info("isRemoveReq : " + isRemoveReq);
+
+        model.addAttribute("isRemoveReq", isRemoveReq);
+    }
+
+    @PostMapping("/checkPw")
+    public String checkPwPost(Model model, MemberJoinDTO memberJoinDTO, RedirectAttributes redirectAttributes, boolean isRemoveReq) {
+        log.info("checkPwPost..........................");
         log.info(memberJoinDTO);
-        memberService.remove(memberJoinDTO.getMid());
+        log.info("isRemoveReq : " + isRemoveReq );
+
+        Authentication authentication   = SecurityContextHolder.getContext().getAuthentication();
+        log.info(authentication.getName());
+
+        String mpw_login =  memberService.getDetail(authentication.getName()).getMpw();
+        String paramMpw = memberJoinDTO.getMpw();
+
+        //삭제가 아닌경우 (회원 정보 수정인 경우)
+        if (!isRemoveReq){
+            if(passwordEncoderConfig.passwordEncoder().matches(paramMpw,mpw_login)){
+                log.info("checkPwPost pass..........................");
+                return "redirect:/member/modify";
+
+            }else {
+                log.info("checkPwPost not pass..........................");
+                redirectAttributes.addFlashAttribute("checkPw", "pwError");
+                return "redirect:/member/checkPw";
+            }
+        //삭제인 경우 (회원 삭제인 경우)
+        }else {
+            if(passwordEncoderConfig.passwordEncoder().matches(paramMpw,mpw_login)){
+                log.info("checkPwPost pass..........................");
+                redirectAttributes.addAttribute("mid", memberJoinDTO.getMid());
+                return "redirect:/member/remove";
+            }else {
+                log.info("checkPwPost not pass..........................");
+                redirectAttributes.addAttribute("isRemoveReq", isRemoveReq);
+                redirectAttributes.addAttribute("mid", memberJoinDTO.getMid());
+                redirectAttributes.addFlashAttribute("checkPw", "pwError");
+                return "redirect:/member/checkPw";
+            }
+        }
+    }
+
+    @PreAuthorize("principal.username==#mid")
+    @GetMapping("/remove")
+    public String remove(Model model ,String mid) {
+        log.info("remove..........................");
+        log.info(mid);
+        memberService.remove(mid);
 
         return "redirect:/logout";
     }
