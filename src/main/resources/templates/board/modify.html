@@ -4,7 +4,7 @@
       layout:decorate="~{layout/basic.html}">
 
 <head>
-    <title>Board Modify</title>
+    <title>게시글 수정</title>
 </head>
 
 <div layout:fragment="content">
@@ -12,26 +12,27 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    Board Modify
+                   게시글 수정
                 </div>
                 <div class="card-body">
                     <form th:action="@{/board/modify}" method="post" id="f1">
-                        <div class="input-group mb-3">
+                        <!-- bno 버튼은 안보여도 될거같아서 안보이게 넣음. -->
+                        <div class="input-group mb-3" style="display: none;">
                             <span class="input-group-text">Bno</span>
-                            <input type="text" class="form-control" th:value="${dto.bno}" name="bno" readonly>
+                            <input class="form-control" th:value="${dto.bno}" name="bno" readonly>
                         </div>
                         <div class="input-group mb-3">
-                            <span class="input-group-text">Title</span>
-                            <input type="text" class="form-control" name="title" th:value="${dto.title}">
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Content</span>
-                            <textarea class="form-control col-sm-5" rows="5" name="content">[[${dto.content}]]</textarea>
+                            <span class="input-group-text">제목</span>
+                            <input type="text" class="form-control" name="title" th:value="${dto.title}" placeholder="제목">
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">Writer</span>
+                            <span class="input-group-text">내용</span>
+                            <textarea class="form-control col-sm-5" rows="5" name="content" placeholder="내용">[[${dto.content}]]</textarea>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">작성자</span>
                             <input type="text" class="form-control" th:value="${dto.writer}" name="writer" readonly>
                         </div>
 
@@ -43,11 +44,11 @@
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">RegDate</span>
+                            <span class="input-group-text">등록일</span>
                             <input type="text" class="form-control" th:value="${#temporals.format(dto.regDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
                         </div>
                         <div class="input-group mb-3">
-                            <span class="input-group-text">ModDate</span>
+                            <span class="input-group-text">수정일</span>
                             <input type="text" class="form-control" th:value="${#temporals.format(dto.modDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
                         </div>
 
