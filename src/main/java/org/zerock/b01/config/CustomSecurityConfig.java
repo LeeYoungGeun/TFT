@@ -9,11 +9,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.zerock.b01.security.handler.Custom403Handler;
+import org.zerock.b01.security.handler.CustomSocialLoginSuccesHandler;
 
 import javax.sql.DataSource;
 
@@ -25,6 +28,7 @@ public class CustomSecurityConfig {
 
     private final DataSource dataSource;
     private final UserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -51,14 +55,18 @@ public class CustomSecurityConfig {
                    .tokenValiditySeconds(60 * 60 * 24 * 30);
         });
 
-        // 로그인 후 아래 경로로 이동되면서 정보가 확인됨
-//        http.authorizeHttpRequests(authorize -> {
-//            authorize.requestMatchers("/api/user").authenticated()
-//                    .anyRequest().permitAll();
-//        });
+        http.oauth2Login(httpSecurityOAuth2LoginConfigurer -> {
+            httpSecurityOAuth2LoginConfigurer.loginPage("/member/login");
+            /*httpSecurityOAuth2LoginConfigurer.successHandler(authenticationSuccessHandler());*/
+        });
 
         return http.build();
     }
+
+   /* @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler(){
+        return new CustomSocialLoginSuccesHandler(passwordEncoder);
+    }*/
 
     //AccessDeniedHandler 빈등록
     @Bean

@@ -21,9 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class CustomUserDetailsService implements UserDetailsService {
 
-//    private final PasswordEncoderConfig passwordEncoderConfig;
     //private PasswordEncoder passwordEncoder;  // 주입하면 순환구조 발생 final 제거
-
     private final MemberRespository memberRespository;
 
     @Override
