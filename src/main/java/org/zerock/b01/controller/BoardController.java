@@ -99,22 +99,23 @@ public class BoardController {
 
     @PreAuthorize("principal.username==#boardDTO.writer")
     @PostMapping("/modify")
-    public String modify(PageRequestDTO pageRequestDTO, @Valid BoardDTO boardDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+    public String modify(PageRequestDTO pageRequestDTO,
+                         @Valid BoardDTO boardDTO,
+                         BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes) {
 
-        if(bindingResult.hasErrors()){
+        if(bindingResult.hasErrors()) {
             String link = pageRequestDTO.getLink();
-
-            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-
-            return "redirect:/board/modify"+link;
+            redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
+            redirectAttributes.addAttribute("bno", boardDTO.getBno());
+            return "redirect:/board/modify?"+link;
         }
 
         boardService.modify(boardDTO);
-
-        redirectAttributes.addFlashAttribute("result", "modified");
+        redirectAttributes.addFlashAttribute("result","modified");
         redirectAttributes.addAttribute("bno", boardDTO.getBno());
-
         return "redirect:/board/read";
+
     }
 
     @PreAuthorize("principal.username==#boardDTO.writer")

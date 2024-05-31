@@ -141,9 +141,10 @@
 
     let errorMsg = ''
 
+
     if(errors){
         for (let i = 0; i < errors.length; i++) {
-            errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
+            errorMsg += `${errors[i].field}이(가) 짧습니다. \n`
         }
         history.replaceState({}, null, null)
         alert(errorMsg)
@@ -166,7 +167,6 @@
 
         formObj.method ='post'
         formObj.submit()
-        alert("게시글이 수정 되었습니다.")
 
     }, false)
 

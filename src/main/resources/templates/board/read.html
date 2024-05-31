@@ -122,8 +122,8 @@
             <div class="mb-3" th:each="fileName: ${dto.fileNames}">
               <img th:src="|/view/${fileName}|" class="img-fluid">
             </div>
-            <div th:text="${dto.content}" class="mb-3 left"></div>
           </div>
+          <div th:text="${dto.content}" class="mb-3 left"></div>
 
           <hr class="hrfrom"/>
 
@@ -250,6 +250,22 @@
           <button type="button" class="btn btn-outline-dark closeModifyBtn">닫기</button>
         </div>
 
+      </div>
+    </div>
+  </div>
+
+  <!-- 댓글 수정 모달 -->
+  <div class="modal commentModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+        </div>
+        <div class="modal-body" style="text-align: center">
+          <p th:if="${result == 'modified'}">게시글이 성공적으로 수정되었습니다.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        </div>
       </div>
     </div>
   </div>
@@ -492,6 +508,14 @@
       button.classList.toggle('btn-clicked')
     })
   })
+
+  //게시글 수정 모달
+  const result = [[${result}]];
+  const modal = new bootstrap.Modal(document.querySelector(".commentModal"));
+
+  if (result) {
+    modal.show();
+  }
 
 </script>
 
