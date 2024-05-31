@@ -49,9 +49,9 @@
       font-size: 3rem;
     }
 
-    .card-img-top {
+    .img-top {
       max-width: 500px; /* 이미지파일 크기 */
-      height: 500px;
+      max-height: 500px;
     }
 
     .like-text {
@@ -120,7 +120,7 @@
           <hr/>
           <div th:if="${dto.fileNames != null && dto.fileNames.size() > 0}">
             <div class="mb-3" th:each="fileName: ${dto.fileNames}">
-              <img th:src="|/view/${fileName}|" class="img-fluid">
+              <img th:src="|/view/${fileName}|" class="img-fluid img-top">
             </div>
           </div>
           <div th:text="${dto.content}" class="mb-3 left"></div>
