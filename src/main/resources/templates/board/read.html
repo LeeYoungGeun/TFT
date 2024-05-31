@@ -8,6 +8,47 @@
   <title>게시판</title>
 
   <style>
+
+    .titleMa {
+      margin: 0;
+      padding: 0;
+    }
+    .left {
+      margin-left: 1em;
+    }
+
+    .titleLeft{
+      margin-left: 0.3em;
+    }
+
+    .right{
+      margin-right: 1em;
+    }
+
+    hr {
+      margin-top: 5;
+      margin-bottom: 20;
+    }
+
+    .hrfrom{
+      margin-top: 3em;
+      margin-bottom: 3em;
+    }
+
+    .jua-regular {
+      font-family: "Jua", sans-serif;
+      font-weight: 500;
+      font-style: normal;
+      font-size: 3rem;
+    }
+
+    .dongle-regular {
+      font-family: "Dongle", sans-serif;
+      font-weight: 500;
+      font-style: normal;
+      font-size: 3rem;
+    }
+
     .card-img-top {
       max-width: 500px; /* 이미지파일 크기 */
       height: 500px;
@@ -38,16 +79,16 @@
     }
 
     .header-text {
-        font-weight: bold;
+      font-weight: bold;
     }
 
     .btn-clicked {
-        background-color: lightcyan;
+      background-color: lightcyan;
     }
 
     .btn-modify {display:inline-block;}
     .btn-modify:after {display: inline-block;
-    content: "\00d7"; font-size:20px; margin-left:5px;}
+      content: "\00d7"; font-size:20px; margin-left:5px;}
 
   </style>
 </head>
@@ -60,39 +101,31 @@
           게시판
         </div>
         <div class="card-body">
-          <div class="input-group mb-3">
-            <span class="input-group-text">번호</span>
-            <input type="text" class="form-control" th:value="${dto.bno}" readonly>
+
+
+          <hr/>
+          <div class="titleMa">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Dongle&family=Jua&display=swap" rel="stylesheet">
+            <p class="jua-regular dongle-regular titleMa titleLeft" th:text="${dto.title}"></p>
+
+            <div class="d-flex align-items-center titleMa left">
+              <span th:text="${#temporals.format(dto.modDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+              <span class="mx-2">|</span>
+              <span th:text="${dto.writer}"></span>
+            </div>
+
           </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text">제목</span>
-            <input type="text" class="form-control" th:value="${dto.title}" readonly>
+          <hr/>
+          <div th:if="${dto.fileNames != null && dto.fileNames.size() > 0}">
+            <div class="mb-3" th:each="fileName: ${dto.fileNames}">
+              <img th:src="|/view/${fileName}|" class="img-fluid">
+            </div>
+            <div th:text="${dto.content}" class="mb-3 left"></div>
           </div>
 
-          <div class="card" th:if="${dto.fileNames != null && dto.fileNames.size() > 0}">
-            <img class="card-img-top"
-                 th:each="fileName: ${dto.fileNames}"
-                 th:src="|/view/${fileName}|">
-          </div>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text">내용</span>
-            <textarea class="form-control col-sm-5" rows="5" readonly>[[${dto.content}]]</textarea>
-          </div>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text">작성자</span>
-            <input type="text" class="form-control" th:value="${dto.writer}" readonly>
-          </div>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text">작성일</span>
-            <input type="text" class="form-control" th:value="${#temporals.format(dto.regDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text">수정일</span>
-            <input type="text" class="form-control" th:value="${#temporals.format(dto.modDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
-          </div>
+          <hr class="hrfrom"/>
 
           <div class="my-4" th:with="user=${#authentication.principal}"><!-- th:with 변수 선언 -->
             <div class="d-flex justify-content-between">
@@ -141,13 +174,13 @@
 
       <table class="table table-striped">
         <thead>
-            <tr>
-              <th scope="col" style="font-weight: bold">번호</th>
-              <th scope="col" style="font-weight: bold">내용</th>
-              <th scope="col" style="font-weight: bold">작성자</th>
-              <th scope="col" style="font-weight: bold">작성일</th>
-              <th scope="col" style="font-weight: bold">수정</th>
-            </tr>
+        <tr>
+          <th scope="col" style="font-weight: bold">번호</th>
+          <th scope="col" style="font-weight: bold">내용</th>
+          <th scope="col" style="font-weight: bold">작성자</th>
+          <th scope="col" style="font-weight: bold">작성일</th>
+          <th scope="col" style="font-weight: bold">수정</th>
+        </tr>
         </thead>
         <tbody class="replyList">
         </tbody>
