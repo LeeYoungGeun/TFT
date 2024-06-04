@@ -14,7 +14,7 @@ public class RootConfig {
         modelMapper.getConfiguration()
                 .setFieldMatchingEnabled(true)
                 .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
-                .setMatchingStrategy(MatchingStrategies.STRICT);
+                .setMatchingStrategy(MatchingStrategies.LOOSE);
 
         return modelMapper; //특징 dto 와 vo를 변환을 해준다. STRICT : 이름이 똑같아야 바뀜 / 변수명과 데이터 타입이 같아야함.
     }
