@@ -138,7 +138,7 @@
 
           <hr class="hrfrom"/>
 
-          <div class="my-4" th:with="user=${#authentication.principal}"><!-- th:with 변수 선언 -->
+          <div class="my-4" th:with="user=${mNicName}"><!-- th:with 변수 선언 -->
             <div class="d-flex justify-content-between">
 
               <div class="like-box">
@@ -161,7 +161,7 @@
                 <a th:href="|@{/board/list}?${link}|" class="text-decoration-none">
                   <button type="button" class="btn btn-primary">게시판</button>
                 </a>
-                <a th:if="${user != null && user.username == dto.writer}"
+                <a th:if="${user != null && user == dto.writer}"
                    th:href="|@{/board/modify(bno=${dto.bno})}&${link}|" class="text-decoration-none">
                   <button type="button" class="btn btn-secondary">수정</button>
                 </a>
@@ -222,9 +222,9 @@
             <input type="text" class="form-control replyText">
           </div>
 
-          <div class="input-group mb-3" th:with="user=${#authentication.principal}">
+          <div class="input-group mb-3" th:with="user=${mNicName}">
             <span class="input-group-text">작성자</span>
-            <input type="text" class="form-control replyer" th:value="${user.username}" readonly>
+            <input type="text" class="form-control replyer" th:value="${user}" readonly>
           </div>
         </div>
 
@@ -289,7 +289,7 @@
 
 <script layout:fragment="script" th:inline="javascript">
 
-  const currentUser = [[${#authentication.principal.username}]]
+  const currentUser = [[${mNicName}]]
 
   // 댓글 목록 처리...
   const bno = [[${dto.bno}]]
@@ -387,11 +387,18 @@
     }
 
     addReply(replyObj).then(result => {
-      alert('등록이 완료되었습니다.')
-      registerModal.hide()
-      replyText.value = ''
-      replyer.value = currentUser
-      printReplies(1,10, true) // 댓글목록갱신
+      //인증되지 않은 사용자 접근 시
+      if(result.rno === undefined ){
+        alert("인증되지 않은 사용자 입니다.")
+        modifyModal.hide()
+        self.location = '/error/403_hdr'
+      }else {
+        alert('등록이 완료되었습니다.')
+        registerModal.hide()
+        replyText.value = ''
+        replyer.value = currentUser
+        printReplies(1,10, true) // 댓글목록갱신
+      }
     }).catch(e => {
       alert("등록을 실패하였습니다.")
     })
@@ -452,6 +459,8 @@
       replyHeader.innerHTML = reply.rno
       modifyText.value = reply.replyText
       modifyModal.show()
+      // 작성자 추가
+      replyer.value = reply.replyer
 
       hasAuth = currentUser === reply.replyer
 
@@ -470,7 +479,9 @@
     const replyObj = {
       bno:bno,
       rno:replyHeader.innerHTML,
-      replyText:modifyText.value
+      replyText:modifyText.value,
+      // 작성자 추가
+      replyer:replyer.value
     }
 
     // 수정됨을 알리는 창
@@ -496,12 +507,13 @@
       // CustomSecurityConfig에서 등록한 Custom403Handler로 들어가게되고
       // memberController login메서드로 error param에 값을 실어서 호출하고 error page(view)를 리턴하는데
       // 현재부분에서 error 페이지를 리다이렉팅 하지못하는 문제가 있으나,
-      // result를 출력했을 때 html 소스코드가 찍혀 현재 html을 찍힌 코드로 변경처리해줌
+      // result를 출력했을 때 html 소스코드가 찍혀 값존재 여부로 alert처리
       if(result !== "" ){
         alert("관리자 계정만 삭제가 가능합니다.")
         modifyModal.hide()
-        document.open();
-        document.write(result);
+        /*document.open();
+        document.write(result);*/
+        /*self.location = '/error/403_hdr'*/
       }else {
         alert("삭제되었습니다.")
         replyText.value =''

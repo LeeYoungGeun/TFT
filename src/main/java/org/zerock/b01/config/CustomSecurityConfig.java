@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -24,6 +25,7 @@ import javax.sql.DataSource;
 @Log4j2
 @RequiredArgsConstructor
 @EnableMethodSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class CustomSecurityConfig {
 
     private final DataSource dataSource;
@@ -57,16 +59,16 @@ public class CustomSecurityConfig {
 
         http.oauth2Login(httpSecurityOAuth2LoginConfigurer -> {
             httpSecurityOAuth2LoginConfigurer.loginPage("/member/login");
-            /*httpSecurityOAuth2LoginConfigurer.successHandler(authenticationSuccessHandler());*/
+            httpSecurityOAuth2LoginConfigurer.successHandler(authenticationSuccessHandler());
         });
 
         return http.build();
     }
 
-   /* @Bean
+   @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler(){
         return new CustomSocialLoginSuccesHandler(passwordEncoder);
-    }*/
+    }
 
     //AccessDeniedHandler 빈등록
     @Bean

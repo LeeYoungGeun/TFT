@@ -26,10 +26,10 @@
 
 <script layout:fragment="script" th:inline="javascript">
 
-    const userLogininfoName = [[${#authentication.name}]];
+    const userLogininfoNicName = [[${mNicName}]];
 
-    if (userLogininfoName){
-        document.querySelector(".welcome").innerHTML = userLogininfoName + "님 환영합니다.";
+    if (userLogininfoNicName){
+        document.querySelector(".welcome").innerHTML = userLogininfoNicName + "님 환영합니다.";
     }
 
     document.querySelector(".modifyBtn").addEventListener("click", function (e) {

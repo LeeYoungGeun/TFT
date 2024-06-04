@@ -23,7 +23,7 @@ public class MemberSecurityDTO extends User implements OAuth2User {
     private String mpw;
     private String mname;
     private String mnick;
-    private String memail;
+    /*private String memail;*/
     private String mpno;
     private boolean del;
     private boolean social;
@@ -31,7 +31,7 @@ public class MemberSecurityDTO extends User implements OAuth2User {
     private Map<String, Object> props; //소셜 로그인 정보
 
     public MemberSecurityDTO(String username, String password,
-                             String mname, String mnick, String memail, String mpno,
+                             String mname, String mnick, /*String memail,*/ String mpno,
                              boolean del, boolean social,
                              Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
@@ -39,7 +39,7 @@ public class MemberSecurityDTO extends User implements OAuth2User {
         this.mpw = password;
         this.mname = mname;
         this.mnick = mnick;
-        this.memail = memail;
+        /*this.memail = memail;*/
         this.mpno = mpno;
         this.del = del;
         this.social = social;

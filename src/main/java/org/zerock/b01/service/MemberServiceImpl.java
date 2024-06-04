@@ -23,17 +23,24 @@ public class MemberServiceImpl implements MemberService{
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void join(MemberJoinDTO memberJoinDTO) throws MidExistException {
+    public void join(MemberJoinDTO memberJoinDTO) throws MidExistException, MnickExistException {
 
         log.info("Member Service Imp join================================");
 
         String mid = memberJoinDTO.getMid();
 
-        boolean exist = memberRespository.existsById(mid);
+        boolean existId = memberRespository.existsById(mid);
 
-        if (exist){
-            log.info("--------------------중복");
+        if (existId){
+            log.info("--------------------중복ID");
             throw  new MidExistException();
+        }
+
+        boolean mnick = memberRespository.existsByMnick(memberJoinDTO.getMnick());
+
+        if (mnick){
+            log.info("--------------------중복NICK");
+            throw  new MnickExistException();
         }
 
         Member member = modelMapper.map(memberJoinDTO, Member.class);

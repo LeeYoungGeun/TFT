@@ -31,6 +31,7 @@ public class ReplyController {
     @Operation(summary = "Repies POST - POST 방식으로 댓글 등록")
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
 
+    @PreAuthorize("isAuthenticated()")
     public Map<String,Long> register(
             @Valid @RequestBody ReplyDTO replyDTO,
             BindingResult bindingResult) throws BindException {
@@ -83,12 +84,15 @@ public class ReplyController {
     }
 
 
+    @PreAuthorize("@getPrincipalInMnick.getPrincipalInMnick(principal.username,#replyDTO.replyer)")
     @Operation(summary = "Modify Reply - PUT 방식으로 특정 댓글 수정하기")
     @PutMapping("/{rno}")
     public Map<String,Long> modify(@PathVariable("rno") Long rno, @RequestBody ReplyDTO replyDTO) {
 
         log.info("modify--------------------------------------");
         log.info(rno);
+        log.info("replyDTO--------------------------------------");
+        log.info(replyDTO);
 
         replyDTO.setRno(rno);
 

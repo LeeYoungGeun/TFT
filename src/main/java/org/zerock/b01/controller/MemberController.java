@@ -3,20 +3,18 @@ package org.zerock.b01.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.b01.config.PasswordEncoderConfig;
 import org.zerock.b01.domain.Member;
+import org.zerock.b01.dto.MailDTO;
 import org.zerock.b01.dto.MemberJoinDTO;
+import org.zerock.b01.service.MailService;
 import org.zerock.b01.service.MemberService;
 
 @Controller
@@ -25,11 +23,9 @@ import org.zerock.b01.service.MemberService;
 @RequestMapping("/member/")
 public class MemberController {
 
-    @Autowired
-    MemberService memberService;
-
-    @Autowired
-    PasswordEncoderConfig passwordEncoderConfig;
+    private final MemberService memberService;
+    private final PasswordEncoderConfig passwordEncoderConfig;
+    private final MailService mailService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage")
@@ -37,7 +33,11 @@ public class MemberController {
 
         log.info("mypage ..........................");
 
-        model.addAttribute("msg", "mypage");
+        Authentication authentication   = SecurityContextHolder.getContext().getAuthentication();
+        Member detail =  memberService.getDetail(authentication.getName());
+        log.info(detail);
+        model.addAttribute("mNicName", detail.getMnick());
+
     }
 
     @RequestMapping(value = "/login", method = {RequestMethod.GET})
@@ -85,6 +85,9 @@ public class MemberController {
         } catch (MemberService.MidExistException e) {
             redirectAttributes.addFlashAttribute("error", "mid");
             return "redirect:/member/join";
+        } catch (MemberService.MnickExistException e) {
+            redirectAttributes.addFlashAttribute("error", "mnick");
+            return "redirect:/member/join";
         }
 
         redirectAttributes.addAttribute("join", "join_success");
@@ -129,6 +132,11 @@ public class MemberController {
     public void checkPw(Model model , boolean isRemoveReq) {
         log.info("checkPw..........................");
         log.info("isRemoveReq : " + isRemoveReq);
+
+        Authentication authentication   = SecurityContextHolder.getContext().getAuthentication();
+        Member detail =  memberService.getDetail(authentication.getName());
+        log.info(detail);
+        model.addAttribute("mNicName", detail.getMnick());
 
         model.addAttribute("isRemoveReq", isRemoveReq);
     }
@@ -180,6 +188,12 @@ public class MemberController {
         memberService.remove(mid);
 
         return "redirect:/logout";
+    }
+
+    @PostMapping("/mail")
+    public void mailSend(MailDTO mailDTO){
+        log.info("MailSend..........................");
+        mailService.createMail(mailDTO);
     }
 
 }

@@ -10,7 +10,7 @@ public class MemberJoinDTO {
     private String mname;
     private String mnick;
     private String mpw;
-    private String memail;
+    /*private String memail;*/
     private String mpno;
     private boolean del;
 

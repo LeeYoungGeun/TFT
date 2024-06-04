@@ -43,11 +43,14 @@
     //로그인한 ID
     const userLogininfoName = [[${#authentication.name}]];
 
+    //db에 저장된 닉네임
+    const userLogininfoNicName = [[${mNicName}]];
+
     if (isRemoveReq && isRemoveReq === true){
-        document.querySelector(".welcome").innerHTML = userLogininfoName + "님 환영합니다. 비밀번호 체크 후 회원탈퇴됩니다.";
+        document.querySelector(".welcome").innerHTML = userLogininfoNicName + "님 환영합니다. 비밀번호 체크 후 회원탈퇴됩니다.";
     }else {
         if (userLogininfoName){
-            document.querySelector(".welcome").innerHTML = userLogininfoName + "님 환영합니다.";
+            document.querySelector(".welcome").innerHTML = userLogininfoNicName + "님 환영합니다.";
         }
     }
 

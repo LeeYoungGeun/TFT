@@ -3,12 +3,10 @@ package org.zerock.b01.security;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.zerock.b01.config.PasswordEncoderConfig;
 import org.zerock.b01.domain.Member;
 import org.zerock.b01.dto.MemberSecurityDTO;
 import org.zerock.b01.repository.MemberRespository;
@@ -49,7 +47,7 @@ class CustomUserDetailsService implements UserDetailsService {
                 member.getMpw(),
                 member.getMname(),
                 member.getMnick(),
-                member.getMemail(),
+                /*member.getMemail(),*/
                 member.getMpno(),
                 member.isDel(),
                 false,       // 소셜로 로그인 처리하지 않는 상황

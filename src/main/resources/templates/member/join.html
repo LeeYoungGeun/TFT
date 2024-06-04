@@ -14,8 +14,9 @@
             <div class="card-body">
                 <form id="registerForm" action="/member/join" method="post">
                     <div class="input-group mb-3">
-                        <span class="input-group-text">아이디</span>
-                        <input type="text" name="mid" class="form-control" required >
+                        <span class="input-group-text">이메일(ID)</span>
+                        <input type="email" name="mid" class="form-control" required >
+                        <button type="button" class="btn btn-primary email_cert">이메일 인증</button>
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">이름</span>
@@ -30,10 +31,10 @@
                         <span class="input-group-text">비밀번호</span>
                         <input type="text" name="mpw" class="form-control" required >
                     </div>
-                    <div class="input-group mb-3">
+                    <!--<div class="input-group mb-3">
                         <span class="input-group-text">이메일</span>
                         <input type="email" name="memail" class="form-control" required >
-                    </div>
+                    </div>-->
                     <div class="input-group mb-3">
                         <span class="input-group-text">핸드폰 번호</span>
                         <input type="text" name="mpno" class="form-control" required >
@@ -68,6 +69,10 @@
         alert("동일한 ID를 가진 계정이 존재합니다.")
     }
 
+    if (error && error == 'mnick'){
+        alert("동일한 닉네임을 가진 계정이 존재합니다.")
+    }
+
     document.querySelector(".listBtn").addEventListener("click", function (e) {
         e.preventDefault()
         e.stopPropagation()
@@ -81,6 +86,40 @@
         e.stopPropagation()
 
         self.location = '/member/join'
+
+    }, false)
+
+    //메일인증
+    document.querySelector(".email_cert").addEventListener("click", function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        var form = document.createElement("form");
+        form.setAttribute("charset", "UTF-8");
+        form.setAttribute("method", "Post");  //Post 방식
+        form.setAttribute("action", "/member/mail"); //요청 보낼 주소
+
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "text");
+        hiddenField.setAttribute("name", "receiver");
+        hiddenField.setAttribute("value", "이영근");
+        form.appendChild(hiddenField);
+
+        hiddenField1 = document.createElement("input");
+        hiddenField1.setAttribute("type", "text");
+        hiddenField1.setAttribute("name", "title");
+        hiddenField1.setAttribute("value", "안녕하세요 메일보냅니다.");
+        form.appendChild(hiddenField1);
+
+        hiddenField2 = document.createElement("input");
+        hiddenField2.setAttribute("type", "text");
+        hiddenField2.setAttribute("name", "content");
+        hiddenField2.setAttribute("value", "내용");
+        form.appendChild(hiddenField2);
+
+        document.body.appendChild(form);
+
+        form.submit();
 
     }, false)
 

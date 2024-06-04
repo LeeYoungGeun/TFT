@@ -1,10 +1,7 @@
 package org.zerock.b01.domain;
 
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
@@ -16,14 +13,19 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString(exclude = "roleSet")
 @Builder
+@Table(name="Member", uniqueConstraints = {
+        @UniqueConstraint(
+                name="mnick_unique",
+                columnNames="mnick"
+        )})
 public class Member extends BaseEntity{
 
     @Id
-    private String mid;
+    private String mid; //mid를 email 형식으로 변경
     private String mname;
     private String mnick;
     private String mpw;
-    private String memail;
+    /*private String memail;*/
     private String mpno;
     private boolean del;
     private boolean social;
@@ -35,9 +37,9 @@ public class Member extends BaseEntity{
     private Set<MemberRole> roleSet = new HashSet<>();
 
     //이메일 변경
-    public void changeEmail(String memail) {
+    /*public void changeEmail(String memail) {
         this.memail = memail;
-    }
+    }*/
 
     //패스워드 변경 (세터 대신)
     public  void changePassword(String mpw) {

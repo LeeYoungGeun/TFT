@@ -65,21 +65,30 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
     }
 
     private MemberSecurityDTO generateDTO(String email, String nickName,Map<String, Object> params){
-        Optional<Member> result = memberRespository.findByMemail(email);
+        Optional<Member> result = memberRespository.findByMid(email);
+        Boolean existNick =  memberRespository.existsByMnick(nickName);
+        String nickName_exist ;
+        //닉네임이 존재하면
+        if(existNick){
+            nickName_exist = email;
+        }else {
+        //닉네임이 존재 하지 않으면
+            nickName_exist = nickName;
+        }
 
         //데이터베이스에 해당 이메일 사용자가 없는 경우...
         if(result.isEmpty()){
             //회원추가
             Member member = Member.builder()
-                    .mid(email)
-                    .mname(nickName)
-                    .mnick(nickName)
-                    .mpw(passwordEncoder.encode("1111"))
-                    .memail(email)
-                    .mpno("01012341234")
-                    .del(false)
-                    .social(true)
-                    .build();
+                        .mid(email)
+                        .mname(nickName)
+                        .mnick(nickName_exist)
+                        .mpw(passwordEncoder.encode("1111"))
+                        /*.memail(email)*/
+                        .mpno("01000000000")
+                        .del(false)
+                        .social(true)
+                        .build();
             member.addRole(MemberRole.USER);
             memberRespository.save(member);
             // MemberSecurityDTO로 반환....
@@ -87,8 +96,8 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
                     email
                     ,"1111"
                     ,nickName
-                    ,nickName
-                    ,email
+                    ,nickName_exist
+                    /*,email*/
                     ,"01012341234"
                     ,false
                     ,true
@@ -101,10 +110,9 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
             MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO(
                     member.getMid(),
                     member.getMpw(),
-                    member.getMemail(),
-                    member.getMemail(),
-                    member.getMemail(),
-                    member.getMemail(),
+                    member.getMname(),
+                    member.getMnick(),
+                    member.getMpno(),
                     member.isDel(),
                     member.isSocial(),
                     member.getRoleSet().stream()

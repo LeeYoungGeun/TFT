@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -23,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.b01.domain.Board;
+import org.zerock.b01.domain.Member;
 import org.zerock.b01.dto.*;
 import org.zerock.b01.service.BoardService;
+import org.zerock.b01.service.MemberService;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -41,6 +44,7 @@ public class BoardController {
     private String uploadPath;
 
     private final BoardService boardService;
+    private final MemberService memberService;
 
     @GetMapping("/list")
     public void setLog(PageRequestDTO pageRequestDTO, Model model) {
@@ -58,8 +62,11 @@ public class BoardController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/register")
-    public void registerGet(){
-
+    public void registerGet(Model model){
+        Authentication authentication   = SecurityContextHolder.getContext().getAuthentication();
+        Member detail =  memberService.getDetail(authentication.getName());
+        log.info(detail);
+        model.addAttribute("mNicName", detail.getMnick());
     }
 
     @PreAuthorize("hasAnyRole({'ROLE_USER','ROLE_ADMIN'})")
@@ -67,6 +74,11 @@ public class BoardController {
     public String registerPost(@Valid BoardDTO boardDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
 
         log.info("board POST register.......");
+
+        /*Authentication authentication   = SecurityContextHolder.getContext().getAuthentication();
+        Member detail =  memberService.getDetail(authentication.getName());
+        log.info(detail);
+        boardDTO.setWriter(detail.getMnick());*/
 
         if(bindingResult.hasErrors()) {
             log.info("has errors.......");
@@ -88,6 +100,14 @@ public class BoardController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping({"/read", "/modify"})
     public void read(Long bno, PageRequestDTO pageRequestDTO, Model model){
+
+        Authentication authentication   = SecurityContextHolder.getContext().getAuthentication();
+        Member detail =  memberService.getDetail(authentication.getName());
+        log.info("authentication----------------------");
+        log.info(authentication.getPrincipal());
+        log.info(detail);
+        model.addAttribute("mNicName", detail.getMnick());
+
         BoardDTO boardDTO = boardService.readOne(bno);
         log.info(boardDTO);
 
@@ -97,7 +117,8 @@ public class BoardController {
         model.addAttribute("likes", likes);
     }
 
-    @PreAuthorize("principal.username==#boardDTO.writer")
+    /*@PreAuthorize("principal.username==#boardDTO.writer")*/
+    @PreAuthorize("@getPrincipalInMnick.getPrincipalInMnick(principal.username,#boardDTO.writer)")
     @PostMapping("/modify")
     public String modify(PageRequestDTO pageRequestDTO,
                          @Valid BoardDTO boardDTO,
@@ -118,7 +139,8 @@ public class BoardController {
 
     }
 
-    @PreAuthorize("principal.username==#boardDTO.writer")
+    /*@PreAuthorize("principal.username==#boardDTO.writer")*/
+    @PreAuthorize("@getPrincipalInMnick.getPrincipalInMnick(principal.username,#boardDTO.writer)")
     @PostMapping("/remove")
     public String remove(BoardDTO boardDTO, RedirectAttributes redirectAttributes){
         log.info("REMOVE----------------------------------------------");

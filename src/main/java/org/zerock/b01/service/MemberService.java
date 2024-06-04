@@ -14,7 +14,16 @@ public interface MemberService {
         }
     }
 
-    void join(MemberJoinDTO memberJoinDTO) throws MidExistException;
+    static class MnickExistException extends Exception {
+
+        public MnickExistException() {}
+
+        public MnickExistException(String message) {
+            super(message);
+        }
+    }
+
+    void join(MemberJoinDTO memberJoinDTO) throws MidExistException,MnickExistException;
     void modify(MemberJoinDTO memberJoinDTO);
     void remove(String mid);
     Member getDetail(String mid);
