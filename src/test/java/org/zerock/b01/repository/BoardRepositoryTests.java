@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 @SpringBootTest
 @Log4j2
@@ -33,13 +34,17 @@ public class BoardRepositoryTests {
 
     @Test
     public void insertTest(){
-        Board board = Board.builder()
-                .title("test12345678")
-                .writer("testWriter12345678")
-                .content("testContent12345678")
-                .build();
 
-        boardRepository.save(board);
+        IntStream.rangeClosed(1,100).forEach(i->{
+            Board board = Board.builder()
+                    .title("title" + i )
+                    .writer("member" + i)
+                    .content("content" + i)
+                    .build();
+            boardRepository.save(board);
+        });
+
+
     }
 
     @Test

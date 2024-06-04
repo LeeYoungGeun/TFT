@@ -25,7 +25,6 @@ public class MemberController {
 
     private final MemberService memberService;
     private final PasswordEncoderConfig passwordEncoderConfig;
-    private final MailService mailService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage")
@@ -189,11 +188,4 @@ public class MemberController {
 
         return "redirect:/logout";
     }
-
-    @PostMapping("/mail")
-    public void mailSend(MailDTO mailDTO){
-        log.info("MailSend..........................");
-        mailService.createMail(mailDTO);
-    }
-
 }
