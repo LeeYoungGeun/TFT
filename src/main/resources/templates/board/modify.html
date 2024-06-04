@@ -22,13 +22,11 @@
                             <input class="form-control" th:value="${dto.bno}" name="bno" readonly>
                         </div>
                         <div class="input-group mb-3">
-                            <span class="input-group-text">제목</span>
                             <input type="text" class="form-control" name="title" th:value="${dto.title}" placeholder="제목">
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">내용</span>
-                            <textarea class="form-control col-sm-5" rows="5" name="content" placeholder="내용">[[${dto.content}]]</textarea>
+                            <textarea class="form-control col-sm-5" rows="10" name="content" placeholder="내용">[[${dto.content}]]</textarea>
                         </div>
 
                         <div class="input-group mb-3">
@@ -54,7 +52,7 @@
 
                         <div class="my-4" th:with="user=${#authentication.principal}">
                             <div class="float-end">
-                                <button type="button" class="btn btn-primary listBtn">게시판</button>
+                                <button type="button" class="btn btn-primary listBtn">목록</button>
                                 <button th:if="${user != null && user.username == dto.writer}" type="button" class="btn btn-secondary modBtn">수정</button>
                                 <button th:if="${user != null && user.username == dto.writer}" type="button" class="btn btn-danger removeBtn">삭제</button>
                             </div>

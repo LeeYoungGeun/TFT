@@ -21,13 +21,21 @@
       margin-left: 0.3em;
     }
 
-    .right{
-      margin-right: 1em;
-    }
+
 
     hr {
-      margin-top: 5;
-      margin-bottom: 20;
+      margin-top: 1em;
+      margin-bottom: 0.3em;
+    }
+
+    .hr-top{
+      margin-top: 0.5em;
+      margin-bottom: 1em;
+    }
+
+    .hr-bottom{
+      margin-top: 0.3em;
+      margin-bottom: 1em;
     }
 
     .hrfrom{
@@ -47,11 +55,14 @@
       font-weight: 500;
       font-style: normal;
       font-size: 3rem;
+      margin: 0.18em;
+      padding: 0.1em;
+      line-height: 0;
     }
 
     .img-top {
-      max-width: 500px; /* 이미지파일 크기 */
-      max-height: 500px;
+      max-width: 1000px; /* 이미지파일 크기 */
+      max-height: 700px;
     }
 
     .like-text {
@@ -103,12 +114,12 @@
         <div class="card-body">
 
 
-          <hr/>
+          <hr class="hr-top"/>
           <div class="titleMa">
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Dongle&family=Jua&display=swap" rel="stylesheet">
-            <p class="jua-regular dongle-regular titleMa titleLeft" th:text="${dto.title}"></p>
+            <p class="dongle-regular titleMa titleLeft" th:text="${dto.title}"></p>
 
             <div class="d-flex align-items-center titleMa left">
               <span th:text="${#temporals.format(dto.modDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
@@ -117,13 +128,13 @@
             </div>
 
           </div>
-          <hr/>
+          <hr class="hr-bottom"/>
           <div th:if="${dto.fileNames != null && dto.fileNames.size() > 0}">
             <div class="mb-3" th:each="fileName: ${dto.fileNames}">
               <img th:src="|/view/${fileName}|" class="img-fluid img-top">
             </div>
           </div>
-          <div th:text="${dto.content}" class="mb-3 left"></div>
+          <div th:utext="${dto.contentEnter}" class="mb-3 left"></div>
 
           <hr class="hrfrom"/>
 

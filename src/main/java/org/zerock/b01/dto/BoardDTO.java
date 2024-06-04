@@ -25,12 +25,15 @@ public class BoardDTO {
     @NotEmpty
     private String writer;
     @NotEmpty
-
     private String content;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
 
     private List<String> fileNames;
+
+    public String getContentEnter() {
+        return this.content.replace("\n", "<br>");
+    }
 
 
 }
