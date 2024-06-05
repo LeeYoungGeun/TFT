@@ -7,7 +7,9 @@
     <title>게시글 수정</title>
 </head>
 
+<!--내용-->
 <div layout:fragment="content">
+<!--    게시글 수정-->
     <div class="row mt-3">
         <div class="col">
             <div class="card">
@@ -21,26 +23,27 @@
                             <span class="input-group-text">Bno</span>
                             <input class="form-control" th:value="${dto.bno}" name="bno" readonly>
                         </div>
+<!--                        제목 입력하기-->
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" name="title" th:value="${dto.title}" placeholder="제목">
                         </div>
-
+<!--                        내용 입력하기-->
                         <div class="input-group mb-3">
                             <textarea class="form-control col-sm-5" rows="10" name="content" placeholder="내용">[[${dto.content}]]</textarea>
                         </div>
-
+<!--                        작성자 표시하기-->
                         <div class="input-group mb-3">
                             <span class="input-group-text">작성자</span>
                             <input type="text" class="form-control" th:value="${dto.writer}" name="writer" readonly>
                         </div>
-
+<!--                        이미지 첨부하기-->
                         <div class="input-group mb-3">
                             <span class="input-group-text">이미지</span>
                             <div class="float-end uploadHidden">
                                 <button type="button" class="btn btn-primary uploadFileBtn">첨부</button>
                             </div>
                         </div>
-
+<!--                        등록일 및 수정일 표시-->
                         <div class="input-group mb-3">
                             <span class="input-group-text">등록일</span>
                             <input type="text" class="form-control" th:value="${#temporals.format(dto.regDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
@@ -49,7 +52,7 @@
                             <span class="input-group-text">수정일</span>
                             <input type="text" class="form-control" th:value="${#temporals.format(dto.modDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
                         </div>
-
+<!--                        사용자와 작성자가 같을 때만 수정, 삭제 버튼을 표시-->
                         <div class="my-4" th:with="user=${mNicName}">
                             <div class="float-end">
                                 <button type="button" class="btn btn-primary listBtn">목록</button>
@@ -65,18 +68,22 @@
         </div><!-- end col-->
     </div><!-- end row-->
 
-
+<!--    업로드된 이미지 목록 표시-->
     <div class="row mt-3">
         <div class="col ">
             <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
+<!--                각 이미지에 대한 카드 생성-->
                 <th:block th:each="fileName:${dto.fileNames}">
                     <div class="card col-4" th:with = "arr = ${fileName.split('_')}">
                         <div class="card-header d-flex justify-content-center">
+<!--                            파일 이름 표시-->
                             [[${arr[1]}]]
+<!--                            파일 삭제 버튼-->
                             <button class="btn-sm btn-danger"
                                     th:onclick="removeFile([[${arr[0]}]], [[${arr[1]}]], this)">X</button>
                         </div>
                         <div class="card-body">
+<!--                            이미지 표시-->
                             <img th:src="|/view/s_${fileName}|" th:data-src="${fileName}" >
                         </div>
                     </div><!-- card -->
@@ -85,7 +92,7 @@
         </div>
     </div>
 
-
+<!--    파일 업로드 모달-->
     <div class="modal uploadModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -95,18 +102,21 @@
                 </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
+<!--                        파일 업로드 입력-->
                         <input type="file" name="files" class="form-control" multiple >
                     </div>
                 </div>
                 <div class="modal-footer">
+<!--                    업로드 버튼-->
                     <button type="button" class="btn btn-primary uploadBtn">등록</button>
+<!--                    닫기 버튼-->
                     <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal" >닫기</button>
                 </div>
             </div>
         </div>
     </div><!-- register modal -->
 
-
+<!--    삭제 확인 모달-->
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -118,7 +128,9 @@
                     정말 삭제하시겠습니까?
                 </div>
                 <div class="modal-footer">
+<!--                    삭제 버튼-->
                     <button type="button" class="btn btn-danger" id="deleteBtn">삭제</button>
+<!--                    닫기 버튼-->
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>

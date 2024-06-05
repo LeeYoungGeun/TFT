@@ -5,6 +5,7 @@
 
 <head>
     <style>
+        /*페이지네이션링크스타일*/
         .pagination .page-link {
             cursor: pointer;
             color: #0c63e4;
@@ -12,6 +13,7 @@
         .pagination .page-link:hover {
             color: #0d6efd;
         }
+        /*테이블스타일*/
         table {
             table-layout: fixed;
             width: 100%;
@@ -21,6 +23,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+        /*테이블 각 열의 너비 설정*/
         th:nth-child(1) { width: 10%;}
         th:nth-child(2) { width: 50%;}
         th:nth-child(3) { width: 15%;}
@@ -44,12 +47,15 @@
 
 <body>
 <div layout:fragment="content">
+<!--    검색 폼-->
     <div class="row mt-3">
         <form action="/board/list" method="get">
             <div class="col">
+<!--                페이지 크기 설정-->
                 <input type="hidden" name="size" th:value="${pageRequestDTO.size}">
                 <div class="input-group">
                     <div class="input-group-prepend">
+<!--                        검색 유형 선택-->
                         <select class="form-select" name="type">
                             <option value="">---</option>
                             <option value="t" th:selected="${pageRequestDTO.type =='t'}">제목</option>
@@ -59,8 +65,10 @@
                             <option value="tcw" th:selected="${pageRequestDTO.type =='tcw'}">제목 내용 작성자</option>
                         </select>
                     </div>
+<!--                    검색어 입력-->
                     <input type="text" class="form-control" name="keyword" th:value="${pageRequestDTO.keyword}">
                     <div class="input-group-append">
+<!--                        검색 및 초기화 버튼-->
                         <button class="btn btn-outline-secondary searchBtn" type="submit">검색</button>
                         <button class="btn btn-outline-secondary clearBtn" type="button">초기화</button>
                     </div>
@@ -69,6 +77,7 @@
         </form>
     </div>
 
+<!--    게시판 목록-->
     <div class="row mt-3">
         <div class="col">
             <div class="card">
@@ -76,9 +85,11 @@
                     더쿠 게시판
                 </div>
                 <div class="card-body">
+<!--                 게시글 목록 테이블-->
                     <table class="table">
                         <thead>
                         <tr>
+<!--                            테이블 헤더-->
                             <th scope="col" style="font-weight: bold">번호</th>
                             <th scope="col" style="font-weight: bold">제목</th>
                             <th scope="col" style="font-weight: bold">작성자</th>
@@ -87,31 +98,40 @@
                         </tr>
                         </thead>
                         <tbody th:with="link = ${pageRequestDTO.getLink()}">
+<!--                        게시글 목록 반복-->
                         <tr th:each="dto:${responseDTO.dtoList}">
                             <th scope="row" style="font-weight: normal">[[${dto.bno}]]</th>
+<!--                            게시글 제목 및 링크-->
                             <td>
                                 <a th:href="|@{/board/read(bno =${dto.bno})}&${link}|" class="text-decoration-none"> [[${dto.title}]] </a>
+<!--                                댓글 수 표시-->
                                 <span class="badge progress-bar-success" style="color:#0a53be"> [ [[${dto.replyCount}]] ]</span>
                             </td>
+<!--                            작성자, 추천수, 작성일-->
                             <td>[[${dto.writer}]]</td>
                             <td>[[${dto.likeCount}]]</td>
                             <td>[[${#temporals.format(dto.regDate, 'yyyy-MM-dd')}]]</td>
                         </tr>
                         </tbody>
                     </table>
+<!--                    글 작성 버튼-->
                     <div>
                         <button type="button" class="btn btn-primary registerBtn">글 작성</button>
                     </div>
+<!--                    페이지네이션-->
                     <div class="float-end">
                         <ul class="pagination .page-link:hover flex-wrap">
+<!--                            이전 페이지-->
                             <li class="page-item" th:if="${responseDTO.prev}">
                                 <a class="page-link" th:data-num="${responseDTO.start - 1}">Previous</a>
                             </li>
+<!--                            페이지 번호-->
                             <th:block th:each="i: ${#numbers.sequence(responseDTO.start, responseDTO.end)}">
                                 <li th:class="${responseDTO.page == i} ? 'page-item active' : 'page-item'">
                                     <a class="page-link" th:data-num="${i}">[[${i}]]</a>
                                 </li>
                             </th:block>
+<!--                            다음 페이지-->
                             <li class="page-item" th:if="${responseDTO.next}">
                                 <a class="page-link" th:data-num="${responseDTO.end + 1}">Next</a>
                             </li>
@@ -121,15 +141,18 @@
             </div><!--end card-->
         </div><!-- end col-->
     </div><!-- end row-->
+<!--    모달-->
     <div class="modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                 </div>
                 <div class="modal-body" style="text-align: center">
+<!--                    게시글 등록 삭제 성공 메세지-->
                     <p th:if="${result == 'register'}">게시글이 성공적으로 등록되었습니다.</p>
                     <p th:if="${result == 'removed'}">게시글이 성공적으로 삭제되었습니다.</p>
                 </div>
+<!--                모달 닫기-->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
@@ -140,12 +163,7 @@
 
 <script layout:fragment="script" th:inline="javascript">
 
-    // 로그인상태에서 로그인 접근 시 /board/list로 리다이렉팅되면서 alert 출력
-    /*const allready = [[${allready}]];
-    if (allready) {
-        alert("이미 로그인 상태입니다.")
-    }*/
-
+    // 페이지네이션 클릭 이벤트
     document.querySelector(".pagination").addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -162,12 +180,14 @@
         formObj.submit();
     }, false);
 
+    // 검색 초기화 클릭 이벤트
     document.querySelector(".clearBtn").addEventListener("click", function (e){
         e.preventDefault();
         e.stopPropagation();
         self.location ='/board/list';
     }, false);
 
+    // 모달 생성 및 표시
     const result = [[${result}]];
     const modal = new bootstrap.Modal(document.querySelector(".modal"));
 
@@ -175,6 +195,7 @@
         modal.show();
     }
 
+    // 글 작성 버튼 클릭 이벤트
     document.querySelector(".registerBtn").addEventListener("click", function (e){
         e.preventDefault();
         e.stopPropagation();

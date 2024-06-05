@@ -7,7 +7,7 @@
   <title>게시판</title>
 
   <style>
-
+    /*타이틀 스타일*/
     .titleMa {
       margin: 0;
       padding: 0;
@@ -21,7 +21,7 @@
     }
 
 
-
+    /*수평선 스타일*/
     hr {
       margin-top: 1em;
       margin-bottom: 0.3em;
@@ -42,28 +42,24 @@
       margin-bottom: 3em;
     }
 
-    .jua-regular {
-      font-family: "Jua", sans-serif;
-      font-weight: 500;
-      font-style: normal;
-      font-size: 3rem;
-    }
-
+    /*텍스트 스타일*/
     .dongle-regular {
       font-family: "Dongle", sans-serif;
       font-weight: 500;
       font-style: normal;
       font-size: 3rem;
       margin: 0.18em;
-      padding: 0.1em;
+      padding: 0.2em;
       line-height: 0;
     }
 
+    /*이미지 스타일*/
     .img-top {
-      max-width: 1000px; /* 이미지파일 크기 */
-      max-height: 700px;
+      max-width: 100%; /* 이미지파일 크기 */
+      height: auto;
     }
 
+    /*좋아요*/
     .like-text {
       font-weight: bold;
       color: #0a53be;
@@ -88,18 +84,6 @@
       margin-right: 10px;
     }
 
-    .header-text {
-      font-weight: bold;
-    }
-
-    .btn-clicked {
-      background-color: lightcyan;
-    }
-
-    .btn-modify {display:inline-block;}
-    .btn-modify:after {display: inline-block;
-      content: "\00d7"; font-size:20px; margin-left:5px;}
-
   </style>
 </head>
 
@@ -111,35 +95,37 @@
           게시판
         </div>
         <div class="card-body">
-
-
+<!--          상단 수평선-->
           <hr class="hr-top"/>
+<!--          게시글 제목 및 작성 정보-->
           <div class="titleMa">
+<!--            글 제목-->
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Dongle&family=Jua&display=swap" rel="stylesheet">
             <p class="dongle-regular titleMa titleLeft" th:text="${dto.title}"></p>
-
+<!--            글 작성일 및 작성자-->
             <div class="d-flex align-items-center titleMa left">
               <span th:text="${#temporals.format(dto.modDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
               <span class="mx-2">|</span>
               <span th:text="${dto.writer}"></span>
             </div>
-
           </div>
+<!--          하단 수평선-->
           <hr class="hr-bottom"/>
+<!--          게시글 이미지 및 내용-->
           <div th:if="${dto.fileNames != null && dto.fileNames.size() > 0}">
             <div class="mb-3" th:each="fileName: ${dto.fileNames}">
               <img th:src="|/view/${fileName}|" class="img-fluid img-top">
             </div>
           </div>
           <div th:utext="${dto.contentEnter}" class="mb-3 left"></div>
-
+<!--          글 사이 수평선-->
           <hr class="hrfrom"/>
-
+<!--          좋아요 및 수정 목록 버튼-->
           <div class="my-4" th:with="user=${mNicName}"><!-- th:with 변수 선언 -->
             <div class="d-flex justify-content-between">
-
+<!--              좋아요 버튼-->
               <div class="like-box">
                 <form th:action="@{/board/like}" method="post" class="d-inline-block">
                   <input type="hidden" name="bno" th:value="${dto.bno}" />
@@ -157,9 +143,11 @@
 
 
               <div>
+<!--                목록 버튼-->
                 <a th:href="|@{/board/list}?${link}|" class="text-decoration-none">
-                  <button type="button" class="btn btn-primary">게시판</button>
+                  <button type="button" class="btn btn-primary">목록</button>
                 </a>
+<!--                수정 버튼(작성자에게만 표시)-->
                 <a th:if="${user != null && user == dto.writer}"
                    th:href="|@{/board/modify(bno=${dto.bno})}&${link}|" class="text-decoration-none">
                   <button type="button" class="btn btn-secondary">수정</button>
@@ -174,14 +162,30 @@
     </div><!-- end col-->
   </div><!-- end row-->
 
+  <!-- 게시글 수정 완료 모달 -->
+  <div class="modal commentModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+        </div>
+        <div class="modal-body" style="text-align: center">
+          <p th:if="${result == 'modified'}">게시글이 성공적으로 수정되었습니다.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <!-- 댓글 처리 영역 만들기...  -->
+  <!-- 댓글 처리 영역   -->
   <div class="row mt-3">
     <div class="col-md-12">
       <div class="my-4">
+<!--        등록버튼-->
         <button class="btn btn-info addReplyBtn">댓글등록</button>
       </div>
-
+<!--      댓글 목록 테이블-->
       <table class="table table-striped">
         <thead>
         <tr>
@@ -198,6 +202,7 @@
     </div>
   </div>
 
+<!--  댓글 페이지네이션-->
   <div class="row mt-3">
     <div class="col">
       <ul class="pagination replyPaging">
@@ -205,7 +210,7 @@
     </div>
   </div>
 
-  <!-- 모달 -->
+  <!-- 댓글 작성 모달 -->
   <div class="modal registerModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -236,7 +241,7 @@
     </div>
   </div>
 
-  <!-- modify modal -->
+  <!-- 댓글 수정 모달 -->
 
   <div class="modal modifyModal" tabindex="-1">
     <div class="modal-dialog">
@@ -264,38 +269,22 @@
     </div>
   </div>
 
-  <!-- 댓글 수정 모달 -->
-  <div class="modal commentModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-        </div>
-        <div class="modal-body" style="text-align: center">
-          <p th:if="${result == 'modified'}">게시글이 성공적으로 수정되었습니다.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="/js/reply.js"></script>
 
 </div>
 
 <script layout:fragment="script" th:inline="javascript">
-
+    // 현재 사용자의 닉네임을 가져와 currentUser 변수에 저장
   const currentUser = [[${mNicName}]]
 
-  // 댓글 목록 처리...
+  // 댓글 목록 처리
   const bno = [[${dto.bno}]]
 
   const replyList = document.querySelector('.replyList')      // 댓글 목록 DOM
   const replyPaging = document.querySelector('.replyPaging')  // 댓글 페이지 목록 DOM
 
+    // 댓글 목록 출력 함수
   function printList(dtoList) {
     let str = '';
 
@@ -312,37 +301,39 @@
         </tr>`
       }
     }
+    // 댓글 목록을 HTML 로 구성하여  replyList 에 삽입
     replyList.innerHTML = str
   }
-
+  // 댓글 페이지 목록 출력 함수
   function printPages(data) {   //댓글 페이지 목록 출력
 
     //pagination
     let pageStr = '';
 
-    //이전 버튼
+    //이전 페이지 버튼 처리
     if(data.prev) {
       pageStr += `<li class="page-item">
                     <a class="page-link" data-page="${data.start - 1}">PREV</a>
                  </li>`
     }
 
-    //페이지 번호...
+    //페이지 번호 출력
     for (let i = data.start; i <= data.end; i++ ){
       pageStr += `<li class="page-item ${i == data.page? "active":""}">
                     <a class="page-link" data-page="${i}">${i}</a>
                 </li>`
     }
 
-    // 다음 버튼
+    // 다음 페이지 버튼 처리
     if(data.next) {
       pageStr += `<li class="page-item">
                     <a class="page-link" data-page="${data.end + 1}">NEXT</a>
                  </li>`
     }
+    // 페이지 목록을 HTML 로 구성하여 replyPaging에 삽입
     replyPaging.innerHTML = pageStr
   }
-
+  // 댓글 목록 및 페이지 출력 함수
   function printReplies(page, size, goLast) {
     // console.log("printReplies : "+bno, page, size)
     getList({bno, page, size, goLast}).then(
@@ -356,35 +347,32 @@
       console.log(e)
     })
   }
-  //함수 호출
+  // 페이지가 로드될 때 댓글 목록 출력
   printReplies(1,10,true)
 
-  //댓글 등록
+  //댓글 등록 모달 관련 처리
   const registerModal = new bootstrap.Modal(document.querySelector(".registerModal"))
-
-  //registerModal
   const registerBtn = document.querySelector(".registerBtn")
   const replyText = document.querySelector(".replyText")
   const replyer = document.querySelector(".replyer")
   const closeRegisterBtn = document.querySelector(".closeRegisterBtn")
 
-  // ADD REPLY 버튼클릭시 모달 창 띄우고 닫기
+  // 댓글 등록 버튼 클릭 시 모달창 열기
   document.querySelector(".addReplyBtn").addEventListener("click", function (e){
     registerModal.show()
   }, false)
-
+    // 등록 모달 닫기 버튼 클릭 시 모달 창 닫기
   closeRegisterBtn.addEventListener("click", function (e){
     registerModal.hide()
   }, false)
-
-
+    // 댓글 등록 버튼 클릭 시 처리
   registerBtn.addEventListener("click", function (e){
     const replyObj = {
       bno:bno,
       replyText:replyText.value,
       replyer:currentUser
     }
-
+    // 댓글 등록 요청 후 처리
     addReply(replyObj).then(result => {
       //인증되지 않은 사용자 접근 시
       if(result.rno === undefined ){
@@ -423,9 +411,8 @@
     printReplies(page, size)
   }, false)
 
-  // modifyModal
+  // 수정 모달 관련 처리
   const modifyModal = new bootstrap.Modal(document.querySelector(".modifyModal"))
-
   const replyHeader = document.querySelector(".replyHeader")
   const modifyText = document.querySelector(".modifyText")
   const modifyBtn = document.querySelector(".modifyBtn")
@@ -452,7 +439,7 @@
       return
     }
 
-    // 댓글 내용 모달창 띄우기
+    // 댓글 수정 모달창 띄우기
     getReply(rno).then(reply => {
       console.log(reply)
       replyHeader.innerHTML = reply.rno
@@ -494,12 +481,11 @@
             console.log(e)
     )
   },false)
-
-
+    // 수정 모달 닫기
   closeModifyBtn.addEventListener("click", function (e) {
     modifyModal.hide()
   }, false)
-
+    // 댓글 삭제 처리
   removeBtn.addEventListener("click", function (e) {
     removeReply(replyHeader.innerHTML).then(result => {
       //result에 값이 있는 경우 : AccessDenied 오류가 발생하여
@@ -524,7 +510,7 @@
       console.log(e)
     })
   },false)
-
+    // 수정 모달 닫기
   document.querySelectorAll('.modifyModayBtn').forEach(button => {
     button.addEventListener('click', function () {
       button.classList.toggle('btn-clicked')

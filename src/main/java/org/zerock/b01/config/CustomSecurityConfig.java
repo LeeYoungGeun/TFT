@@ -32,50 +32,58 @@ public class CustomSecurityConfig {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
+    // HTTP 보안 필터 체인 설정
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.info("-----------------security configure--------------------");
 
         http.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
+            // 접근 거부 핸들러 등록
             httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(accessDeniedHandler());
         });
 
-        //로그인페이지 기본페이지에서 변경
-        http.formLogin(form -> {
+        // 로그인 페이지 및 로그인 성공 후 페이지 설정
+        http.formLogin(form -> { // 폼 기반 로그인 활성화
             form.loginPage("/member/login")
-                    //로그인 성공 기본 페이지
+                    // 로그인 페이지 및 로그인 성공 후 페이지
                     .defaultSuccessUrl("/board/list");
         });
 
         //크롬 개발자도구 네트워크 >> 엘리먼트선택 >> 페이지로드 부분에서 확인가능한 csrf(사용자인증값) 비활성화
+        // CSRF 보안 기능 비활성화
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
 
+        // Remember-Me 기능 설정
         http.rememberMe(httpSecurityRememberMeConfigurer -> {
-           httpSecurityRememberMeConfigurer.key("123456789")
-                   .tokenRepository(persistentTokenRepository())
-                   .userDetailsService(userDetailsService)
-                   .tokenValiditySeconds(60 * 60 * 24 * 30);
+           httpSecurityRememberMeConfigurer.key("123456789") // 키 설정
+                   .tokenRepository(persistentTokenRepository()) // 토큰 저장소 설정
+                   .userDetailsService(userDetailsService) // 사용자 디테일 서비스 설정
+                   .tokenValiditySeconds(60 * 60 * 24 * 30); // 토큰 유효 시간 설정 ( 30일 )
         });
 
+        // OAuth2 로그인 설정
         http.oauth2Login(httpSecurityOAuth2LoginConfigurer -> {
-            httpSecurityOAuth2LoginConfigurer.loginPage("/member/login");
-            httpSecurityOAuth2LoginConfigurer.successHandler(authenticationSuccessHandler());
+            httpSecurityOAuth2LoginConfigurer.loginPage("/member/login"); // 로그인 페이지 설정
+            httpSecurityOAuth2LoginConfigurer.successHandler(authenticationSuccessHandler()); // 로그인 성공 핸들러 설정
         });
 
         return http.build();
     }
 
+    // 소셜 로그인 성공 핸들러 빈 등록
    @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler(){
         return new CustomSocialLoginSuccesHandler(passwordEncoder);
     }
 
+    // 접근 거부 핸들러 빈 등록
     //AccessDeniedHandler 빈등록
     @Bean
     public AccessDeniedHandler accessDeniedHandler(){
         return new Custom403Handler();
     }
 
+    // 정적 리소스 필터링을 위한 웹 보안 커스터마이저 빈 등록
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         log.info("---------------web configure-------------------");
@@ -83,6 +91,7 @@ public class CustomSecurityConfig {
         return (web -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations()));
     }
 
+    // PersistentTokenRepository 빈 등록
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();

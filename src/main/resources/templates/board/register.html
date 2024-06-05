@@ -8,6 +8,7 @@
 </head>
 
 <div layout:fragment="content">
+<!--    게시글 작성 폼-->
     <div class="row mt-3">
         <div class="col">
             <div class="card">
@@ -15,29 +16,30 @@
                     더쿠 게시판
                 </div>
                 <div class="card-body">
+<!--                    게시글 작성 폼-->
                     <form action="/board/register" method="post">
+<!--                        제목-->
                         <div class="input-group mb-3">
                             <input type="text" name="title" class="form-control" placeholder="제목">
                         </div>
-
+<!--                        내용-->
                         <div class="input-group mb-3">
                             <textarea class="form-control col-sm-5" rows="10" name="content"></textarea>
                         </div>
-
+<!--                        작성자-->
                         <div class="input-group mb-3">
                             <span class="input-group-text">작성자</span>
                             <input type="text" name="writer" class="form-control" placeholder="Writer"
                                    th:value="${mNicName}" readonly>
-
                         </div>
-
+<!--                        이미지첨부-->
                         <div class="input-group mb-3">
                             <span class="input-group-text">이미지</span>
                             <div class="float-end uploadHidden">
                                 <button type="button" class="btn btn-primary uploadFileBtn">첨부</button>
                             </div>
                         </div>
-
+<!--                        버튼 그룹-->
                         <div class="my-4">
                             <div class="float-end">
                                 <button type="submit" class="btn btn-primary submitBtn">작성</button>
@@ -53,15 +55,14 @@
         </div><!-- end col-->
     </div><!-- end row-->
 
-
+<!--    업로드 결과 표시-->
     <div class="row mt-3">
         <div class="col ">
             <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
             </div>
         </div>
     </div>
-
-
+<!--    파일 업로드 모달-->
     <div class="modal uploadModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -70,18 +71,22 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+<!--                    파일 선택-->
                     <div class="input-group mb-3">
                         <input type="file" name="files" class="form-control" multiple >
                     </div>
                 </div>
                 <div class="modal-footer">
+<!--                    업로드 버튼-->
                     <button type="button" class="btn btn-primary uploadBtn">등록</button>
+<!--                    닫기 버튼-->
                     <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal" >닫기</button>
                 </div>
             </div>
         </div>
     </div><!-- register modal -->
 
+<!--    Axios 및 업로드 스크립트-->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script src="/js/upload.js"></script>
@@ -90,11 +95,14 @@
 
 <script layout:fragment="script" th:inline="javascript">
 
-    const errors = [[${errors}]];
+    // 서버에서 전달된 오류 메세지 확인
+    const
+        errors = [[${errors}]];
     console.log(errors)
 
     let errorMsg = ''
 
+    // 오류 메세지가 존재하는 경우 처리
     if(errors){
         for (let i = 0; i < errors.length; i++) {
             errorMsg += `${errors[i].field}이(가) 짧습니다. \n`
@@ -105,6 +113,7 @@
     //업로드 모달
     const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
 
+    // 파일 업로드 버튼 클릭 시 업로드 모달 표시
     document.querySelector(".uploadFileBtn").addEventListener("click", function(e){
 
         e.stopPropagation()
@@ -113,7 +122,7 @@
 
     }, false)
 
-
+    // 파일 업로드 버튼 클릭 시 서버로 파일 업로드 요청
     document.querySelector(".uploadBtn").addEventListener("click", function(e){
 
         const formObj = new FormData();
@@ -131,7 +140,7 @@
 
         uploadToServer(formObj).then(result => {
             console.log(result)
-            //console.log(result)
+            // 업로드 결과를 화면에 표시
             for (const uploadResult of result) {
                 showUploadFile(uploadResult)
             }
@@ -141,9 +150,9 @@
         })
 
     },false)
-
+    // 업로드 결과 표시 영역
     const uploadResult = document.querySelector(".uploadResult")
-
+    // 업로드 결과 표시 함수
     function showUploadFile({uuid, fileName, link}){
 
         const str =`<div class="card col-4">
@@ -159,12 +168,11 @@
         uploadResult.innerHTML += str
     }
 
-
+    // 파일 삭제 함수
     function removeFile(uuid,fileName, obj){
 
         console.log(uuid)
         console.log(fileName)
-
         console.log(obj)
 
         const targetDiv = obj.closest(".card")
@@ -174,6 +182,7 @@
         })
     }
 
+    // 게시글 작성 버튼 클릭 시 파일명을 숨겨진 필드에 추가하여 서버로 전송한다.
     document.querySelector(".submitBtn").addEventListener("click", function(e){
 
         e.preventDefault()
