@@ -70,17 +70,11 @@
 
 ![게시글작성](https://github.com/LeeYoungGeun/TFT/blob/main/create.png)
 
-게시글 작성입니다. 로그인 한 사용자만 이용이 가능합니다.
-
-<br>
-<br>
-<br>
-<br>
 
 ![댓글작성](https://github.com/LeeYoungGeun/TFT/blob/main/create2.png)
 
-댓글 작성도 로그인 한 사용자만 이용가능하며 삭제는 관리자만 가능합니다.
 
+게시글 작성입니다. 로그인 한 사용자만 이용이 가능합니다.
 
 
 
@@ -91,6 +85,8 @@
 
 
 
+![댓글작성2](https://github.com/LeeYoungGeun/TFT/blob/main/review.png)
 
+댓글 작성입니다. 로그인 한 사용자만 이용이 가능하며 삭제는 관리자만 가능합니다.
 
 
