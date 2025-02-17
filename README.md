@@ -32,3 +32,65 @@
 ![로그인](https://github.com/LeeYoungGeun/TFT/blob/main/login.png)
 
 로그인 페이지입니다.
+
+<br>
+<br>
+<br>
+<br>
+
+
+![회원가입](https://github.com/LeeYoungGeun/TFT/blob/main/signin.png)
+
+회원가입 페이지입니다. (이메일 인증은 미완성 이메일 주소만 적으면 회원가입 됨.)
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+![게시판](https://github.com/LeeYoungGeun/TFT/blob/main/read.png)
+
+인증없이 들어올 수 있는 게시판입니다.
+
+<br>
+<br>
+<br>
+<br>
+
+![게시글](https://github.com/LeeYoungGeun/TFT/blob/main/read2.png)
+
+인증을 해야 읽을 수 있는 상세 게시글입니다.
+
+<br>
+<br>
+<br>
+<br>
+
+![게시글작성](https://github.com/LeeYoungGeun/TFT/blob/main/create.png)
+
+게시글 작성입니다. 로그인 한 사용자만 이용이 가능합니다.
+
+<br>
+<br>
+<br>
+<br>
+
+![댓글작성](https://github.com/LeeYoungGeun/TFT/blob/main/create2.png)
+
+댓글 작성도 로그인 한 사용자만 이용가능하며 삭제는 관리자만 가능합니다.
+
+
+
+
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+
+
