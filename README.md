@@ -29,6 +29,6 @@
 ## 개발기간 2024 – 05 – 08 ~ 2024 – 06 - 05
 
 
-[!https://github.com/LeeYoungGeun/TFT/blob/main/login.png](로그인)
+![로그인](https://github.com/LeeYoungGeun/TFT/blob/main/login.png)
 
 로그인 페이지입니다.
